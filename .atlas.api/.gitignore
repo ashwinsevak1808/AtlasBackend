@@ -1,0 +1,3 @@
+# Environment values may contain credentials — never commit them.
+environments.json
+*.tmp

@@ -1,0 +1,2430 @@
+{
+  "id": "232a356c5ffd",
+  "name": "Backend",
+  "path": "/Users/ashwinsevak/Desktop/Ashwin Sevak/Projects/Atlas/Backend",
+  "origin": "disk",
+  "framework": "express",
+  "frameworks": [
+    "express"
+  ],
+  "languages": [
+    "typescript"
+  ],
+  "scannedAt": 1787076630986,
+  "routes": [
+    {
+      "id": "GET:/:app.ts:46",
+      "method": "GET",
+      "path": "/",
+      "rawPath": "/",
+      "group": "App",
+      "handlerName": "handler",
+      "file": "app.ts",
+      "line": 46,
+      "middleware": [
+        "cookieParser()",
+        "(inline)",
+        "errorHandler"
+      ],
+      "authRequired": false,
+      "guards": [],
+      "fields": [],
+      "responses": [
+        {
+          "status": 200,
+          "label": "OK",
+          "message": "Atlas Backend API Server Running",
+          "shape": "{ status, message }",
+          "line": 47
+        }
+      ],
+      "calls": [],
+      "env": [],
+      "security": [],
+      "description": null,
+      "confidence": 0.65,
+      "mounted": true
+    },
+    {
+      "id": "POST:/api/auth/forgot-password:src/modules/auth/auth.routes.ts:45",
+      "method": "POST",
+      "path": "/api/auth/forgot-password",
+      "rawPath": "/forgot-password",
+      "group": "Auth",
+      "handlerName": "asyncHandler",
+      "file": "src/modules/auth/auth.routes.ts",
+      "line": 45,
+      "middleware": [
+        "cookieParser()",
+        "(inline)",
+        "errorHandler",
+        "requireInternalKey",
+        "otpLimiter",
+        "validate(forgotPasswordSchema)"
+      ],
+      "authRequired": false,
+      "guards": [],
+      "fields": [
+        {
+          "name": "email",
+          "location": "body",
+          "type": "string",
+          "required": true,
+          "validations": [
+            {
+              "rule": "trim"
+            },
+            {
+              "rule": "toLowerCase"
+            },
+            {
+              "rule": "min",
+              "value": "3"
+            },
+            {
+              "rule": "max",
+              "value": "254"
+            },
+            {
+              "rule": "email"
+            }
+          ],
+          "source": "zod",
+          "confidence": 0.95
+        }
+      ],
+      "responses": [
+        {
+          "status": 200,
+          "label": "OK",
+          "message": null,
+          "shape": null,
+          "line": 101
+        }
+      ],
+      "calls": [
+        {
+          "kind": "service",
+          "target": "service.forgotPassword",
+          "detail": null,
+          "line": 100
+        }
+      ],
+      "env": [],
+      "security": [],
+      "description": null,
+      "confidence": 1,
+      "mounted": true
+    },
+    {
+      "id": "POST:/api/auth/login:src/modules/auth/auth.routes.ts:40",
+      "method": "POST",
+      "path": "/api/auth/login",
+      "rawPath": "/login",
+      "group": "Auth",
+      "handlerName": "asyncHandler",
+      "file": "src/modules/auth/auth.routes.ts",
+      "line": 40,
+      "middleware": [
+        "cookieParser()",
+        "(inline)",
+        "errorHandler",
+        "requireInternalKey",
+        "authLimiter",
+        "validate(loginSchema)"
+      ],
+      "authRequired": true,
+      "guards": [
+        "authLimiter"
+      ],
+      "fields": [
+        {
+          "name": "email",
+          "location": "body",
+          "type": "string",
+          "required": true,
+          "validations": [
+            {
+              "rule": "trim"
+            },
+            {
+              "rule": "toLowerCase"
+            },
+            {
+              "rule": "min",
+              "value": "3"
+            },
+            {
+              "rule": "max",
+              "value": "254"
+            },
+            {
+              "rule": "email"
+            }
+          ],
+          "source": "zod",
+          "confidence": 0.95
+        },
+        {
+          "name": "password",
+          "location": "body",
+          "type": "string",
+          "required": true,
+          "validations": [
+            {
+              "rule": "min",
+              "value": "1"
+            },
+            {
+              "rule": "max",
+              "value": "200"
+            }
+          ],
+          "source": "zod",
+          "confidence": 0.95
+        }
+      ],
+      "responses": [
+        {
+          "status": 200,
+          "label": "OK",
+          "message": "Verify your email address to continue.",
+          "shape": null,
+          "line": 59
+        }
+      ],
+      "calls": [
+        {
+          "kind": "service",
+          "target": "service.login",
+          "detail": null,
+          "line": 56
+        }
+      ],
+      "env": [],
+      "security": [],
+      "description": null,
+      "confidence": 1,
+      "mounted": true
+    },
+    {
+      "id": "POST:/api/auth/logout:src/modules/auth/auth.routes.ts:49",
+      "method": "POST",
+      "path": "/api/auth/logout",
+      "rawPath": "/logout",
+      "group": "Auth",
+      "handlerName": "asyncHandler",
+      "file": "src/modules/auth/auth.routes.ts",
+      "line": 49,
+      "middleware": [
+        "cookieParser()",
+        "(inline)",
+        "errorHandler",
+        "requireInternalKey",
+        "requireAuth"
+      ],
+      "authRequired": true,
+      "guards": [
+        "requireAuth"
+      ],
+      "fields": [],
+      "responses": [
+        {
+          "status": 200,
+          "label": "OK",
+          "message": "Signed out.",
+          "shape": null,
+          "line": 76
+        }
+      ],
+      "calls": [
+        {
+          "kind": "service",
+          "target": "service.logout",
+          "detail": null,
+          "line": 75
+        }
+      ],
+      "env": [],
+      "security": [
+        {
+          "type": "missing-rate-limit",
+          "severity": "medium",
+          "description": "Authentication endpoints are the usual target for credential stuffing, and no rate limiter was found on this route.",
+          "file": "src/modules/auth/auth.routes.ts",
+          "line": 49
+        }
+      ],
+      "description": null,
+      "confidence": 0.65,
+      "mounted": true
+    },
+    {
+      "id": "GET:/api/auth/me:src/modules/auth/auth.routes.ts:48",
+      "method": "GET",
+      "path": "/api/auth/me",
+      "rawPath": "/me",
+      "group": "Auth",
+      "handlerName": "asyncHandler",
+      "file": "src/modules/auth/auth.routes.ts",
+      "line": 48,
+      "middleware": [
+        "cookieParser()",
+        "(inline)",
+        "errorHandler",
+        "requireInternalKey",
+        "requireAuth"
+      ],
+      "authRequired": true,
+      "guards": [
+        "requireAuth"
+      ],
+      "fields": [],
+      "responses": [
+        {
+          "status": 200,
+          "label": "OK",
+          "message": "Signed in.",
+          "shape": null,
+          "line": 85
+        }
+      ],
+      "calls": [
+        {
+          "kind": "service",
+          "target": "service.getCurrentUser",
+          "detail": null,
+          "line": 83
+        },
+        {
+          "kind": "db",
+          "target": "one",
+          "detail": "via auth.service.getCurrentUser → auth.repository.findUserById",
+          "line": 63,
+          "operation": "read",
+          "rawSql": "select $? from users where id = $1",
+          "query": "select $? from users where id = $1",
+          "table": "users"
+        }
+      ],
+      "env": [],
+      "security": [
+        {
+          "type": "missing-rate-limit",
+          "severity": "medium",
+          "description": "Authentication endpoints are the usual target for credential stuffing, and no rate limiter was found on this route.",
+          "file": "src/modules/auth/auth.routes.ts",
+          "line": 48
+        }
+      ],
+      "description": null,
+      "confidence": 0.65,
+      "mounted": true
+    },
+    {
+      "id": "POST:/api/auth/onboarding:src/modules/auth/auth.routes.ts:50",
+      "method": "POST",
+      "path": "/api/auth/onboarding",
+      "rawPath": "/onboarding",
+      "group": "Auth",
+      "handlerName": "asyncHandler",
+      "file": "src/modules/auth/auth.routes.ts",
+      "line": 50,
+      "middleware": [
+        "cookieParser()",
+        "(inline)",
+        "errorHandler",
+        "requireInternalKey",
+        "requireAuth",
+        "validate(onboardingSchema)"
+      ],
+      "authRequired": true,
+      "guards": [
+        "requireAuth"
+      ],
+      "fields": [
+        {
+          "name": "companyName",
+          "location": "body",
+          "type": "string",
+          "required": false,
+          "validations": [
+            {
+              "rule": "trim"
+            },
+            {
+              "rule": "max",
+              "value": "120"
+            }
+          ],
+          "source": "zod",
+          "confidence": 0.95
+        },
+        {
+          "name": "companySize",
+          "location": "body",
+          "type": "enum",
+          "required": false,
+          "validations": [
+            {
+              "rule": "enum",
+              "value": "1 | 2-10 | 11-50 | 51-200 | 201-1000 | 1000+"
+            }
+          ],
+          "source": "zod",
+          "confidence": 0.95,
+          "enumValues": [
+            "1",
+            "2-10",
+            "11-50",
+            "51-200",
+            "201-1000",
+            "1000+"
+          ]
+        },
+        {
+          "name": "fullName",
+          "location": "body",
+          "type": "string",
+          "required": true,
+          "validations": [
+            {
+              "rule": "trim"
+            },
+            {
+              "rule": "min",
+              "value": "2"
+            },
+            {
+              "rule": "max",
+              "value": "80"
+            }
+          ],
+          "source": "zod",
+          "confidence": 0.95
+        },
+        {
+          "name": "heardFrom",
+          "location": "body",
+          "type": "enum",
+          "required": false,
+          "validations": [
+            {
+              "rule": "enum",
+              "value": "search | github | twitter | linkedin | youtube | reddit | friend | newsletter | event | other"
+            }
+          ],
+          "source": "zod",
+          "confidence": 0.95,
+          "enumValues": [
+            "search",
+            "github",
+            "twitter",
+            "linkedin",
+            "youtube",
+            "reddit",
+            "friend",
+            "newsletter",
+            "event",
+            "other"
+          ]
+        },
+        {
+          "name": "heardFromDetail",
+          "location": "body",
+          "type": "string",
+          "required": false,
+          "validations": [
+            {
+              "rule": "trim"
+            },
+            {
+              "rule": "max",
+              "value": "160"
+            }
+          ],
+          "source": "zod",
+          "confidence": 0.95
+        },
+        {
+          "name": "persona",
+          "location": "body",
+          "type": "enum",
+          "required": true,
+          "validations": [
+            {
+              "rule": "enum",
+              "value": "student | developer | freelancer | startup | company | qa | other"
+            }
+          ],
+          "source": "zod",
+          "confidence": 0.95,
+          "enumValues": [
+            "student",
+            "developer",
+            "freelancer",
+            "startup",
+            "company",
+            "qa",
+            "other"
+          ]
+        },
+        {
+          "name": "primaryGoal",
+          "location": "body",
+          "type": "enum",
+          "required": false,
+          "validations": [
+            {
+              "rule": "enum",
+              "value": "test-apis | document-apis | understand-codebase | replace-postman | evaluating | other"
+            }
+          ],
+          "source": "zod",
+          "confidence": 0.95,
+          "enumValues": [
+            "test-apis",
+            "document-apis",
+            "understand-codebase",
+            "replace-postman",
+            "evaluating",
+            "other"
+          ]
+        },
+        {
+          "name": "productUpdates",
+          "location": "body",
+          "type": "boolean",
+          "required": false,
+          "validations": [
+            {
+              "rule": "default",
+              "value": "false"
+            }
+          ],
+          "source": "zod",
+          "confidence": 0.95
+        },
+        {
+          "name": "roleTitle",
+          "location": "body",
+          "type": "string",
+          "required": false,
+          "validations": [
+            {
+              "rule": "trim"
+            },
+            {
+              "rule": "max",
+              "value": "80"
+            }
+          ],
+          "source": "zod",
+          "confidence": 0.95
+        }
+      ],
+      "responses": [
+        {
+          "status": 200,
+          "label": "OK",
+          "message": "Thanks — that is everything.",
+          "shape": null,
+          "line": 95
+        }
+      ],
+      "calls": [
+        {
+          "kind": "service",
+          "target": "service.completeOnboarding",
+          "detail": null,
+          "line": 90
+        },
+        {
+          "kind": "db",
+          "target": "client.query",
+          "detail": "via auth.service.completeOnboarding → pool.withTransaction",
+          "line": 92,
+          "operation": "raw",
+          "query": "client.query(\"BEGIN\")"
+        },
+        {
+          "kind": "db",
+          "target": "client.query",
+          "detail": "via auth.service.completeOnboarding → pool.withTransaction",
+          "line": 94,
+          "operation": "raw",
+          "query": "client.query(\"COMMIT\")"
+        },
+        {
+          "kind": "db",
+          "target": "client.query.catch",
+          "detail": "via auth.service.completeOnboarding → pool.withTransaction",
+          "line": 97,
+          "operation": "raw",
+          "query": "client.query(\"ROLLBACK\").catch(?)"
+        },
+        {
+          "kind": "db",
+          "target": "run",
+          "detail": "via auth.service.completeOnboarding → auth.repository.markOnboarded",
+          "line": 145,
+          "operation": "update",
+          "rawSql": "update users set full_name = $2, onboarded_at = coalesce(onboarded_at, now()) where id = $1",
+          "query": "update users set full_name = $2, onboarded_at = coalesce(onboarded_at, now()) where id = $1",
+          "table": "users"
+        },
+        {
+          "kind": "db",
+          "target": "run",
+          "detail": "via auth.service.completeOnboarding → auth.repository.upsertProfile",
+          "line": 173,
+          "operation": "write",
+          "rawSql": "insert into user_profiles (user_id, persona, role_title, company_name, company_size, heard_from, heard_from_detail, primary_goal) values ($1, $2, $3, $4, $5, $6, $7, $8) on conflict (user_id) do update set persona = excluded.persona, role_title = excluded.role_title, company_name = excluded.company_name, company_size = excluded.company_size, heard_from = excluded.heard_from, heard_from_detail = excluded.heard_from_detail, primary_goal = excluded.primary_goal",
+          "query": "insert into user_profiles (user_id, persona, role_title, company_name, company_size, heard_from, heard_from_detail, primary_goal) values ($1, $2, $3, $4, $5, $6, $7, $8) on conflict (user_id) do update set persona = excluded.persona, role_title = excluded.role_title, company_name = excluded.company_name, company_size = excluded.company_size, heard_from = excluded.heard_from, heard_from_detail = excluded.heard_from_detail, primary_goal = excluded.primary_goal",
+          "table": "user_profiles"
+        },
+        {
+          "kind": "db",
+          "target": "run",
+          "detail": "via auth.service.completeOnboarding → auth.repository.insertConsent",
+          "line": 213,
+          "operation": "write",
+          "rawSql": "insert into user_consents (user_id, kind, granted, version, source, ip, user_agent) values ($1, $2, $3, $4, $5, $6, $7)",
+          "query": "insert into user_consents (user_id, kind, granted, version, source, ip, user_agent) values ($1, $2, $3, $4, $5, $6, $7)",
+          "table": "user_consents"
+        },
+        {
+          "kind": "db",
+          "target": "one",
+          "detail": "via auth.service.completeOnboarding → auth.repository.findUserById",
+          "line": 63,
+          "operation": "read",
+          "rawSql": "select $? from users where id = $1",
+          "query": "select $? from users where id = $1",
+          "table": "users"
+        }
+      ],
+      "env": [],
+      "security": [
+        {
+          "type": "missing-rate-limit",
+          "severity": "medium",
+          "description": "Authentication endpoints are the usual target for credential stuffing, and no rate limiter was found on this route.",
+          "file": "src/modules/auth/auth.routes.ts",
+          "line": 50
+        }
+      ],
+      "description": null,
+      "confidence": 1,
+      "mounted": true
+    },
+    {
+      "id": "POST:/api/auth/register:src/modules/auth/auth.routes.ts:39",
+      "method": "POST",
+      "path": "/api/auth/register",
+      "rawPath": "/register",
+      "group": "Auth",
+      "handlerName": "asyncHandler",
+      "file": "src/modules/auth/auth.routes.ts",
+      "line": 39,
+      "middleware": [
+        "cookieParser()",
+        "(inline)",
+        "errorHandler",
+        "requireInternalKey",
+        "authLimiter",
+        "validate(registerSchema)"
+      ],
+      "authRequired": true,
+      "guards": [
+        "authLimiter"
+      ],
+      "fields": [
+        {
+          "name": "confirmPassword",
+          "location": "body",
+          "type": "string",
+          "required": true,
+          "validations": [],
+          "source": "zod",
+          "confidence": 0.95
+        },
+        {
+          "name": "email",
+          "location": "body",
+          "type": "string",
+          "required": true,
+          "validations": [
+            {
+              "rule": "trim"
+            },
+            {
+              "rule": "toLowerCase"
+            },
+            {
+              "rule": "min",
+              "value": "3"
+            },
+            {
+              "rule": "max",
+              "value": "254"
+            },
+            {
+              "rule": "email"
+            }
+          ],
+          "source": "zod",
+          "confidence": 0.95
+        },
+        {
+          "name": "password",
+          "location": "body",
+          "type": "string",
+          "required": true,
+          "validations": [
+            {
+              "rule": "min",
+              "value": "1"
+            },
+            {
+              "rule": "max",
+              "value": "200"
+            }
+          ],
+          "source": "zod",
+          "confidence": 0.95
+        }
+      ],
+      "responses": [
+        {
+          "status": 201,
+          "label": "Created",
+          "message": "Account created. Check your email for the code.",
+          "shape": null,
+          "line": 30
+        }
+      ],
+      "calls": [
+        {
+          "kind": "service",
+          "target": "service.register",
+          "detail": null,
+          "line": 29
+        }
+      ],
+      "env": [],
+      "security": [],
+      "description": null,
+      "confidence": 1,
+      "mounted": true
+    },
+    {
+      "id": "POST:/api/auth/resend-code:src/modules/auth/auth.routes.ts:43",
+      "method": "POST",
+      "path": "/api/auth/resend-code",
+      "rawPath": "/resend-code",
+      "group": "Auth",
+      "handlerName": "asyncHandler",
+      "file": "src/modules/auth/auth.routes.ts",
+      "line": 43,
+      "middleware": [
+        "cookieParser()",
+        "(inline)",
+        "errorHandler",
+        "requireInternalKey",
+        "otpLimiter",
+        "validate(resendCodeSchema)"
+      ],
+      "authRequired": false,
+      "guards": [],
+      "fields": [
+        {
+          "name": "email",
+          "location": "body",
+          "type": "string",
+          "required": true,
+          "validations": [
+            {
+              "rule": "trim"
+            },
+            {
+              "rule": "toLowerCase"
+            },
+            {
+              "rule": "min",
+              "value": "3"
+            },
+            {
+              "rule": "max",
+              "value": "254"
+            },
+            {
+              "rule": "email"
+            }
+          ],
+          "source": "zod",
+          "confidence": 0.95
+        },
+        {
+          "name": "purpose",
+          "location": "body",
+          "type": "enum",
+          "required": false,
+          "validations": [
+            {
+              "rule": "enum",
+              "value": "verify_email | reset_password"
+            },
+            {
+              "rule": "default",
+              "value": "'verify_email'"
+            }
+          ],
+          "source": "zod",
+          "confidence": 0.95,
+          "enumValues": [
+            "verify_email",
+            "reset_password"
+          ]
+        }
+      ],
+      "responses": [
+        {
+          "status": 200,
+          "label": "OK",
+          "message": null,
+          "shape": null,
+          "line": 52
+        }
+      ],
+      "calls": [
+        {
+          "kind": "mail",
+          "target": "service.resendCode",
+          "detail": null,
+          "line": 51
+        }
+      ],
+      "env": [],
+      "security": [],
+      "description": null,
+      "confidence": 1,
+      "mounted": true
+    },
+    {
+      "id": "POST:/api/auth/reset-password:src/modules/auth/auth.routes.ts:46",
+      "method": "POST",
+      "path": "/api/auth/reset-password",
+      "rawPath": "/reset-password",
+      "group": "Auth",
+      "handlerName": "asyncHandler",
+      "file": "src/modules/auth/auth.routes.ts",
+      "line": 46,
+      "middleware": [
+        "cookieParser()",
+        "(inline)",
+        "errorHandler",
+        "requireInternalKey",
+        "authLimiter",
+        "validate(resetPasswordSchema)"
+      ],
+      "authRequired": true,
+      "guards": [
+        "authLimiter"
+      ],
+      "fields": [
+        {
+          "name": "code",
+          "location": "body",
+          "type": "string",
+          "required": true,
+          "validations": [
+            {
+              "rule": "trim"
+            },
+            {
+              "rule": "regex",
+              "value": "/^\\d{6}$/"
+            }
+          ],
+          "source": "zod",
+          "confidence": 0.9
+        },
+        {
+          "name": "confirmPassword",
+          "location": "body",
+          "type": "string",
+          "required": true,
+          "validations": [],
+          "source": "zod",
+          "confidence": 0.95
+        },
+        {
+          "name": "email",
+          "location": "body",
+          "type": "string",
+          "required": true,
+          "validations": [
+            {
+              "rule": "trim"
+            },
+            {
+              "rule": "toLowerCase"
+            },
+            {
+              "rule": "min",
+              "value": "3"
+            },
+            {
+              "rule": "max",
+              "value": "254"
+            },
+            {
+              "rule": "email"
+            }
+          ],
+          "source": "zod",
+          "confidence": 0.95
+        },
+        {
+          "name": "password",
+          "location": "body",
+          "type": "string",
+          "required": true,
+          "validations": [
+            {
+              "rule": "min",
+              "value": "1"
+            },
+            {
+              "rule": "max",
+              "value": "200"
+            }
+          ],
+          "source": "zod",
+          "confidence": 0.95
+        }
+      ],
+      "responses": [
+        {
+          "status": 200,
+          "label": "OK",
+          "message": "Password changed. Every other device has been signed out.",
+          "shape": null,
+          "line": 106
+        }
+      ],
+      "calls": [
+        {
+          "kind": "service",
+          "target": "service.resetPassword",
+          "detail": null,
+          "line": 105
+        }
+      ],
+      "env": [],
+      "security": [],
+      "description": null,
+      "confidence": 1,
+      "mounted": true
+    },
+    {
+      "id": "POST:/api/auth/verify-email:src/modules/auth/auth.routes.ts:42",
+      "method": "POST",
+      "path": "/api/auth/verify-email",
+      "rawPath": "/verify-email",
+      "group": "Auth",
+      "handlerName": "asyncHandler",
+      "file": "src/modules/auth/auth.routes.ts",
+      "line": 42,
+      "middleware": [
+        "cookieParser()",
+        "(inline)",
+        "errorHandler",
+        "requireInternalKey",
+        "authLimiter",
+        "validate(verifyEmailSchema)"
+      ],
+      "authRequired": true,
+      "guards": [
+        "authLimiter"
+      ],
+      "fields": [
+        {
+          "name": "code",
+          "location": "body",
+          "type": "string",
+          "required": true,
+          "validations": [
+            {
+              "rule": "trim"
+            },
+            {
+              "rule": "regex",
+              "value": "/^\\d{6}$/"
+            }
+          ],
+          "source": "zod",
+          "confidence": 0.9
+        },
+        {
+          "name": "email",
+          "location": "body",
+          "type": "string",
+          "required": true,
+          "validations": [
+            {
+              "rule": "trim"
+            },
+            {
+              "rule": "toLowerCase"
+            },
+            {
+              "rule": "min",
+              "value": "3"
+            },
+            {
+              "rule": "max",
+              "value": "254"
+            },
+            {
+              "rule": "email"
+            }
+          ],
+          "source": "zod",
+          "confidence": 0.95
+        }
+      ],
+      "responses": [
+        {
+          "status": 200,
+          "label": "OK",
+          "message": "Email verified.",
+          "shape": null,
+          "line": 40
+        }
+      ],
+      "calls": [
+        {
+          "kind": "mail",
+          "target": "service.verifyEmail",
+          "detail": null,
+          "line": 39
+        }
+      ],
+      "env": [],
+      "security": [],
+      "description": null,
+      "confidence": 1,
+      "mounted": true
+    },
+    {
+      "id": "POST:/api/flows:src/modules/flows/flow.routes.ts:66",
+      "method": "POST",
+      "path": "/api/flows",
+      "rawPath": "/",
+      "group": "Flow",
+      "handlerName": "asyncHandler",
+      "file": "src/modules/flows/flow.routes.ts",
+      "line": 66,
+      "middleware": [
+        "cookieParser()",
+        "(inline)",
+        "errorHandler",
+        "requireInternalKey",
+        "requireAuth",
+        "requireVerified",
+        "validate(uploadFlowSchema)"
+      ],
+      "authRequired": true,
+      "guards": [
+        "requireAuth"
+      ],
+      "fields": [
+        {
+          "name": "clientFlowId",
+          "location": "body",
+          "type": "string",
+          "required": true,
+          "validations": [
+            {
+              "rule": "min",
+              "value": "1"
+            },
+            {
+              "rule": "max",
+              "value": "200"
+            }
+          ],
+          "source": "zod",
+          "confidence": 0.95
+        },
+        {
+          "name": "definition",
+          "location": "body",
+          "type": "object",
+          "required": true,
+          "validations": [],
+          "source": "zod",
+          "confidence": 0.9
+        },
+        {
+          "name": "environmentId",
+          "location": "body",
+          "type": "string",
+          "required": false,
+          "validations": [
+            {
+              "rule": "uuid"
+            },
+            {
+              "rule": "nullable"
+            }
+          ],
+          "source": "zod",
+          "confidence": 0.95
+        },
+        {
+          "name": "name",
+          "location": "body",
+          "type": "string",
+          "required": true,
+          "validations": [
+            {
+              "rule": "trim"
+            },
+            {
+              "rule": "min",
+              "value": "1"
+            },
+            {
+              "rule": "max",
+              "value": "120"
+            }
+          ],
+          "source": "zod",
+          "confidence": 0.95
+        },
+        {
+          "name": "projectKey",
+          "location": "body",
+          "type": "string",
+          "required": true,
+          "validations": [
+            {
+              "rule": "min",
+              "value": "1"
+            },
+            {
+              "rule": "max",
+              "value": "400"
+            }
+          ],
+          "source": "zod",
+          "confidence": 0.95
+        },
+        {
+          "name": "recipients",
+          "location": "body",
+          "type": "array",
+          "required": false,
+          "validations": [
+            {
+              "rule": "max",
+              "value": "20"
+            },
+            {
+              "rule": "default",
+              "value": "[]"
+            }
+          ],
+          "source": "zod",
+          "confidence": 0.95
+        }
+      ],
+      "responses": [
+        {
+          "status": 201,
+          "label": "Created",
+          "message": "Flow saved and ready to run.",
+          "shape": null,
+          "line": 61
+        }
+      ],
+      "calls": [
+        {
+          "kind": "service",
+          "target": "service.uploadFlow",
+          "detail": null,
+          "line": 60
+        }
+      ],
+      "env": [],
+      "security": [],
+      "description": null,
+      "confidence": 1,
+      "mounted": true
+    },
+    {
+      "id": "GET:/api/flows:src/modules/flows/flow.routes.ts:67",
+      "method": "GET",
+      "path": "/api/flows",
+      "rawPath": "/",
+      "group": "Flow",
+      "handlerName": "asyncHandler",
+      "file": "src/modules/flows/flow.routes.ts",
+      "line": 67,
+      "middleware": [
+        "cookieParser()",
+        "(inline)",
+        "errorHandler",
+        "requireInternalKey",
+        "requireAuth",
+        "requireVerified"
+      ],
+      "authRequired": true,
+      "guards": [
+        "requireAuth"
+      ],
+      "fields": [
+        {
+          "name": "projectKey",
+          "location": "query",
+          "type": "unknown",
+          "required": false,
+          "validations": [],
+          "source": "member-access",
+          "confidence": 0.45
+        }
+      ],
+      "responses": [
+        {
+          "status": 200,
+          "label": "OK",
+          "message": "Flows.",
+          "shape": null,
+          "line": 67
+        }
+      ],
+      "calls": [
+        {
+          "kind": "service",
+          "target": "service.listFlows",
+          "detail": null,
+          "line": 67
+        }
+      ],
+      "env": [],
+      "security": [],
+      "description": null,
+      "confidence": 0.8,
+      "mounted": true
+    },
+    {
+      "id": "DELETE:/api/flows/:id:src/modules/flows/flow.routes.ts:73",
+      "method": "DELETE",
+      "path": "/api/flows/:id",
+      "rawPath": "/:id",
+      "group": "Flow",
+      "handlerName": "asyncHandler",
+      "file": "src/modules/flows/flow.routes.ts",
+      "line": 73,
+      "middleware": [
+        "cookieParser()",
+        "(inline)",
+        "errorHandler",
+        "requireInternalKey",
+        "requireAuth",
+        "requireVerified"
+      ],
+      "authRequired": true,
+      "guards": [
+        "requireAuth"
+      ],
+      "fields": [
+        {
+          "name": "id",
+          "location": "path",
+          "type": "string",
+          "required": true,
+          "validations": [],
+          "source": "path-token",
+          "confidence": 1
+        }
+      ],
+      "responses": [
+        {
+          "status": 200,
+          "label": "OK",
+          "message": "Flow removed from the server.",
+          "shape": null,
+          "line": 73
+        }
+      ],
+      "calls": [
+        {
+          "kind": "service",
+          "target": "service.deleteFlow",
+          "detail": null,
+          "line": 72
+        }
+      ],
+      "env": [],
+      "security": [
+        {
+          "type": "possible-idor",
+          "severity": "medium",
+          "description": "Takes a resource id and is authenticated, but no ownership or tenant check was detected — verify the caller may access that record.",
+          "file": "src/modules/flows/flow.routes.ts",
+          "line": 73
+        }
+      ],
+      "description": null,
+      "confidence": 0.8,
+      "mounted": true
+    },
+    {
+      "id": "PUT:/api/flows/:id/recipients:src/modules/flows/flow.routes.ts:74",
+      "method": "PUT",
+      "path": "/api/flows/:id/recipients",
+      "rawPath": "/:id/recipients",
+      "group": "Flow",
+      "handlerName": "asyncHandler",
+      "file": "src/modules/flows/flow.routes.ts",
+      "line": 74,
+      "middleware": [
+        "cookieParser()",
+        "(inline)",
+        "errorHandler",
+        "requireInternalKey",
+        "requireAuth",
+        "requireVerified",
+        "validate(recipientsSchema)"
+      ],
+      "authRequired": true,
+      "guards": [
+        "requireAuth"
+      ],
+      "fields": [
+        {
+          "name": "id",
+          "location": "path",
+          "type": "string",
+          "required": true,
+          "validations": [],
+          "source": "path-token",
+          "confidence": 1
+        },
+        {
+          "name": "recipients",
+          "location": "body",
+          "type": "array",
+          "required": true,
+          "validations": [
+            {
+              "rule": "max",
+              "value": "20"
+            }
+          ],
+          "source": "zod",
+          "confidence": 0.95
+        }
+      ],
+      "responses": [
+        {
+          "status": 200,
+          "label": "OK",
+          "message": "Recipients updated.",
+          "shape": null,
+          "line": 80
+        }
+      ],
+      "calls": [
+        {
+          "kind": "service",
+          "target": "service.updateRecipients",
+          "detail": null,
+          "line": 79
+        }
+      ],
+      "env": [],
+      "security": [
+        {
+          "type": "possible-idor",
+          "severity": "medium",
+          "description": "Takes a resource id and is authenticated, but no ownership or tenant check was detected — verify the caller may access that record.",
+          "file": "src/modules/flows/flow.routes.ts",
+          "line": 74
+        }
+      ],
+      "description": null,
+      "confidence": 1,
+      "mounted": true
+    },
+    {
+      "id": "POST:/api/flows/:id/run:src/modules/flows/flow.routes.ts:75",
+      "method": "POST",
+      "path": "/api/flows/:id/run",
+      "rawPath": "/:id/run",
+      "group": "Flow",
+      "handlerName": "asyncHandler",
+      "file": "src/modules/flows/flow.routes.ts",
+      "line": 75,
+      "middleware": [
+        "cookieParser()",
+        "(inline)",
+        "errorHandler",
+        "requireInternalKey",
+        "requireAuth",
+        "requireVerified",
+        "runLimiter"
+      ],
+      "authRequired": true,
+      "guards": [
+        "requireAuth"
+      ],
+      "fields": [
+        {
+          "name": "id",
+          "location": "path",
+          "type": "string",
+          "required": true,
+          "validations": [],
+          "source": "path-token",
+          "confidence": 1
+        }
+      ],
+      "responses": [
+        {
+          "status": 200,
+          "label": "OK",
+          "message": "Run finished: {outcome.run.status}.",
+          "shape": null,
+          "line": 97
+        }
+      ],
+      "calls": [
+        {
+          "kind": "service",
+          "target": "service.runStoredFlow",
+          "detail": null,
+          "line": 96
+        },
+        {
+          "kind": "db",
+          "target": "one",
+          "detail": "via flow.service.runStoredFlow → flow.repository.findFlow",
+          "line": 222,
+          "operation": "read",
+          "rawSql": "select * from flows where id = $1 and user_id = $2 and deleted_at is null",
+          "query": "select * from flows where id = $1 and user_id = $2 and deleted_at is null",
+          "table": "flows"
+        },
+        {
+          "kind": "db",
+          "target": "one",
+          "detail": "via flow.service.runStoredFlow → flow.repository.createRun",
+          "line": 266,
+          "operation": "write",
+          "rawSql": "insert into flow_runs (flow_id, user_id, trigger, status, started_at) values ($1, $2, $3, 'running', now()) returning *",
+          "query": "insert into flow_runs (flow_id, user_id, trigger, status, started_at) values ($1, $2, $3, 'running', now()) returning *",
+          "table": "flow_runs"
+        },
+        {
+          "kind": "db",
+          "target": "run",
+          "detail": "via flow.service.runStoredFlow → flow.repository.finishRun",
+          "line": 286,
+          "operation": "update",
+          "rawSql": "update flow_runs set status = $2, total_steps = $3, passed_steps = $4, failed_steps = $5, skipped_steps = $6, duration_ms = $7, error = $8, finished_at = now() where id = $1",
+          "query": "update flow_runs set status = $2, total_steps = $3, passed_steps = $4, failed_steps = $5, skipped_steps = $6, duration_ms = $7, error = $8, finished_at = now() where id = $1",
+          "table": "flow_runs"
+        },
+        {
+          "kind": "db",
+          "target": "run",
+          "detail": "via flow.service.runStoredFlow → flow.repository.finishRun",
+          "line": 330,
+          "operation": "write",
+          "rawSql": "insert into flow_run_steps (run_id, position, node_id, name, method, url, status, status_code, duration_ms, error) values $?",
+          "query": "insert into flow_run_steps (run_id, position, node_id, name, method, url, status, status_code, duration_ms, error) values $?",
+          "table": "flow_run_steps"
+        },
+        {
+          "kind": "db",
+          "target": "run",
+          "detail": "via flow.service.runStoredFlow → flow.repository.finishRun",
+          "line": 342,
+          "operation": "update",
+          "rawSql": "update flow_run_steps set response_excerpt = $3 where run_id = $1 and position = $2",
+          "query": "update flow_run_steps set response_excerpt = $3 where run_id = $1 and position = $2",
+          "table": "flow_run_steps"
+        },
+        {
+          "kind": "db",
+          "target": "query",
+          "detail": "via flow.service.runStoredFlow → flow.repository.markRunError",
+          "line": 351,
+          "operation": "update",
+          "rawSql": "update flow_runs set status = 'error', error = $2, finished_at = now() where id = $1",
+          "query": "update flow_runs set status = 'error', error = $2, finished_at = now() where id = $1",
+          "table": "flow_runs"
+        },
+        {
+          "kind": "db",
+          "target": "query",
+          "detail": "via flow.service.runStoredFlow → flow.repository.touchFlowRun",
+          "line": 362,
+          "operation": "update",
+          "rawSql": "update flows set last_run_at = now() where id = $1",
+          "query": "update flows set last_run_at = now() where id = $1",
+          "table": "flows"
+        },
+        {
+          "kind": "db",
+          "target": "queryOne",
+          "detail": "via flow.service.runStoredFlow → flow.repository.findRun",
+          "line": 366,
+          "operation": "read",
+          "rawSql": "select * from flow_runs where id = $1 and user_id = $2",
+          "query": "select * from flow_runs where id = $1 and user_id = $2",
+          "table": "flow_runs"
+        },
+        {
+          "kind": "db",
+          "target": "query",
+          "detail": "via flow.service.runStoredFlow → flow.repository.listRunSteps",
+          "line": 378,
+          "operation": "read",
+          "rawSql": "select * from flow_run_steps where run_id = $1 order by position",
+          "query": "select * from flow_run_steps where run_id = $1 order by position",
+          "table": "flow_run_steps"
+        },
+        {
+          "kind": "db",
+          "target": "query",
+          "detail": "via flow.service.runStoredFlow → flow.repository.markReportSent",
+          "line": 358,
+          "operation": "update",
+          "rawSql": "update flow_runs set report_sent = true where id = $1",
+          "query": "update flow_runs set report_sent = true where id = $1",
+          "table": "flow_runs"
+        }
+      ],
+      "env": [],
+      "security": [
+        {
+          "type": "possible-idor",
+          "severity": "medium",
+          "description": "Takes a resource id and is authenticated, but no ownership or tenant check was detected — verify the caller may access that record.",
+          "file": "src/modules/flows/flow.routes.ts",
+          "line": 75
+        }
+      ],
+      "description": null,
+      "confidence": 0.8,
+      "mounted": true
+    },
+    {
+      "id": "GET:/api/flows/:id/runs:src/modules/flows/flow.routes.ts:76",
+      "method": "GET",
+      "path": "/api/flows/:id/runs",
+      "rawPath": "/:id/runs",
+      "group": "Flow",
+      "handlerName": "asyncHandler",
+      "file": "src/modules/flows/flow.routes.ts",
+      "line": 76,
+      "middleware": [
+        "cookieParser()",
+        "(inline)",
+        "errorHandler",
+        "requireInternalKey",
+        "requireAuth",
+        "requireVerified"
+      ],
+      "authRequired": true,
+      "guards": [
+        "requireAuth"
+      ],
+      "fields": [
+        {
+          "name": "id",
+          "location": "path",
+          "type": "string",
+          "required": true,
+          "validations": [],
+          "source": "path-token",
+          "confidence": 1
+        },
+        {
+          "name": "limit",
+          "location": "query",
+          "type": "unknown",
+          "required": false,
+          "validations": [],
+          "source": "member-access",
+          "confidence": 0.45
+        }
+      ],
+      "responses": [
+        {
+          "status": 200,
+          "label": "OK",
+          "message": "Runs.",
+          "shape": null,
+          "line": 103
+        }
+      ],
+      "calls": [
+        {
+          "kind": "service",
+          "target": "service.listRuns",
+          "detail": null,
+          "line": 104
+        }
+      ],
+      "env": [],
+      "security": [
+        {
+          "type": "possible-idor",
+          "severity": "medium",
+          "description": "Takes a resource id and is authenticated, but no ownership or tenant check was detected — verify the caller may access that record.",
+          "file": "src/modules/flows/flow.routes.ts",
+          "line": 76
+        }
+      ],
+      "description": null,
+      "confidence": 0.8,
+      "mounted": true
+    },
+    {
+      "id": "GET:/api/flows/:id/schedule:src/modules/flows/flow.routes.ts:78",
+      "method": "GET",
+      "path": "/api/flows/:id/schedule",
+      "rawPath": "/:id/schedule",
+      "group": "Flow",
+      "handlerName": "asyncHandler",
+      "file": "src/modules/flows/flow.routes.ts",
+      "line": 78,
+      "middleware": [
+        "cookieParser()",
+        "(inline)",
+        "errorHandler",
+        "requireInternalKey",
+        "requireAuth",
+        "requireVerified"
+      ],
+      "authRequired": true,
+      "guards": [
+        "requireAuth"
+      ],
+      "fields": [
+        {
+          "name": "id",
+          "location": "path",
+          "type": "string",
+          "required": true,
+          "validations": [],
+          "source": "path-token",
+          "confidence": 1
+        }
+      ],
+      "responses": [
+        {
+          "status": 200,
+          "label": "OK",
+          "message": "Schedule.",
+          "shape": null,
+          "line": 135
+        }
+      ],
+      "calls": [],
+      "env": [],
+      "security": [
+        {
+          "type": "possible-idor",
+          "severity": "medium",
+          "description": "Takes a resource id and is authenticated, but no ownership or tenant check was detected — verify the caller may access that record.",
+          "file": "src/modules/flows/flow.routes.ts",
+          "line": 78
+        }
+      ],
+      "description": null,
+      "confidence": 0.8,
+      "mounted": true
+    },
+    {
+      "id": "PUT:/api/flows/:id/schedule:src/modules/flows/flow.routes.ts:79",
+      "method": "PUT",
+      "path": "/api/flows/:id/schedule",
+      "rawPath": "/:id/schedule",
+      "group": "Flow",
+      "handlerName": "asyncHandler",
+      "file": "src/modules/flows/flow.routes.ts",
+      "line": 79,
+      "middleware": [
+        "cookieParser()",
+        "(inline)",
+        "errorHandler",
+        "requireInternalKey",
+        "requireAuth",
+        "requireVerified",
+        "validate(scheduleSchema)"
+      ],
+      "authRequired": true,
+      "guards": [
+        "requireAuth"
+      ],
+      "fields": [
+        {
+          "name": "id",
+          "location": "path",
+          "type": "string",
+          "required": true,
+          "validations": [],
+          "source": "path-token",
+          "confidence": 1
+        },
+        {
+          "name": "cron",
+          "location": "body",
+          "type": "string",
+          "required": false,
+          "validations": [
+            {
+              "rule": "trim"
+            },
+            {
+              "rule": "max",
+              "value": "120"
+            },
+            {
+              "rule": "nullable"
+            }
+          ],
+          "source": "zod",
+          "confidence": 0.95
+        },
+        {
+          "name": "enabled",
+          "location": "body",
+          "type": "boolean",
+          "required": false,
+          "validations": [
+            {
+              "rule": "default",
+              "value": "true"
+            }
+          ],
+          "source": "zod",
+          "confidence": 0.95
+        },
+        {
+          "name": "kind",
+          "location": "body",
+          "type": "enum",
+          "required": false,
+          "validations": [
+            {
+              "rule": "enum",
+              "value": "cron | once"
+            },
+            {
+              "rule": "default",
+              "value": "'cron'"
+            }
+          ],
+          "source": "zod",
+          "confidence": 0.95,
+          "enumValues": [
+            "cron",
+            "once"
+          ]
+        },
+        {
+          "name": "runAt",
+          "location": "body",
+          "type": "string",
+          "required": false,
+          "validations": [
+            {
+              "rule": "datetime"
+            },
+            {
+              "rule": "nullable"
+            }
+          ],
+          "source": "zod",
+          "confidence": 0.95
+        },
+        {
+          "name": "timezone",
+          "location": "body",
+          "type": "string",
+          "required": false,
+          "validations": [
+            {
+              "rule": "trim"
+            },
+            {
+              "rule": "min",
+              "value": "1"
+            },
+            {
+              "rule": "max",
+              "value": "64"
+            },
+            {
+              "rule": "default",
+              "value": "'UTC'"
+            }
+          ],
+          "source": "zod",
+          "confidence": 0.95
+        }
+      ],
+      "responses": [
+        {
+          "status": 200,
+          "label": "OK",
+          "message": null,
+          "shape": null,
+          "line": 147
+        }
+      ],
+      "calls": [],
+      "env": [],
+      "security": [
+        {
+          "type": "possible-idor",
+          "severity": "medium",
+          "description": "Takes a resource id and is authenticated, but no ownership or tenant check was detected — verify the caller may access that record.",
+          "file": "src/modules/flows/flow.routes.ts",
+          "line": 79
+        }
+      ],
+      "description": null,
+      "confidence": 1,
+      "mounted": true
+    },
+    {
+      "id": "DELETE:/api/flows/:id/schedule:src/modules/flows/flow.routes.ts:80",
+      "method": "DELETE",
+      "path": "/api/flows/:id/schedule",
+      "rawPath": "/:id/schedule",
+      "group": "Flow",
+      "handlerName": "asyncHandler",
+      "file": "src/modules/flows/flow.routes.ts",
+      "line": 80,
+      "middleware": [
+        "cookieParser()",
+        "(inline)",
+        "errorHandler",
+        "requireInternalKey",
+        "requireAuth",
+        "requireVerified"
+      ],
+      "authRequired": true,
+      "guards": [
+        "requireAuth"
+      ],
+      "fields": [
+        {
+          "name": "id",
+          "location": "path",
+          "type": "string",
+          "required": true,
+          "validations": [],
+          "source": "path-token",
+          "confidence": 1
+        }
+      ],
+      "responses": [
+        {
+          "status": 200,
+          "label": "OK",
+          "message": "Schedule removed.",
+          "shape": null,
+          "line": 155
+        }
+      ],
+      "calls": [],
+      "env": [],
+      "security": [
+        {
+          "type": "possible-idor",
+          "severity": "medium",
+          "description": "Takes a resource id and is authenticated, but no ownership or tenant check was detected — verify the caller may access that record.",
+          "file": "src/modules/flows/flow.routes.ts",
+          "line": 80
+        }
+      ],
+      "description": null,
+      "confidence": 0.8,
+      "mounted": true
+    },
+    {
+      "id": "GET:/api/flows/capabilities:src/modules/flows/flow.routes.ts:60",
+      "method": "GET",
+      "path": "/api/flows/capabilities",
+      "rawPath": "/capabilities",
+      "group": "Flow",
+      "handlerName": "asyncHandler",
+      "file": "src/modules/flows/flow.routes.ts",
+      "line": 60,
+      "middleware": [
+        "cookieParser()",
+        "(inline)",
+        "errorHandler",
+        "requireInternalKey",
+        "requireAuth",
+        "requireVerified"
+      ],
+      "authRequired": true,
+      "guards": [
+        "requireAuth"
+      ],
+      "fields": [],
+      "responses": [
+        {
+          "status": 200,
+          "label": "OK",
+          "message": "Flow runner status.",
+          "shape": null,
+          "line": 26
+        }
+      ],
+      "calls": [],
+      "env": [],
+      "security": [],
+      "description": null,
+      "confidence": 0.65,
+      "mounted": true
+    },
+    {
+      "id": "POST:/api/flows/environments:src/modules/flows/flow.routes.ts:62",
+      "method": "POST",
+      "path": "/api/flows/environments",
+      "rawPath": "/environments",
+      "group": "Flow",
+      "handlerName": "asyncHandler",
+      "file": "src/modules/flows/flow.routes.ts",
+      "line": 62,
+      "middleware": [
+        "cookieParser()",
+        "(inline)",
+        "errorHandler",
+        "requireInternalKey",
+        "requireAuth",
+        "requireVerified",
+        "validate(environmentSchema)"
+      ],
+      "authRequired": true,
+      "guards": [
+        "requireAuth"
+      ],
+      "fields": [
+        {
+          "name": "name",
+          "location": "body",
+          "type": "string",
+          "required": true,
+          "validations": [
+            {
+              "rule": "trim"
+            },
+            {
+              "rule": "min",
+              "value": "1"
+            },
+            {
+              "rule": "max",
+              "value": "80"
+            }
+          ],
+          "source": "zod",
+          "confidence": 0.95
+        },
+        {
+          "name": "projectKey",
+          "location": "body",
+          "type": "string",
+          "required": true,
+          "validations": [
+            {
+              "rule": "min",
+              "value": "1"
+            },
+            {
+              "rule": "max",
+              "value": "400"
+            }
+          ],
+          "source": "zod",
+          "confidence": 0.95
+        },
+        {
+          "name": "values",
+          "location": "body",
+          "type": "unknown",
+          "required": false,
+          "validations": [
+            {
+              "rule": "default",
+              "value": "{}"
+            }
+          ],
+          "source": "zod",
+          "confidence": 0.95
+        }
+      ],
+      "responses": [
+        {
+          "status": 200,
+          "label": "OK",
+          "message": "Environment saved.",
+          "shape": null,
+          "line": 38
+        }
+      ],
+      "calls": [
+        {
+          "kind": "service",
+          "target": "service.saveEnvironment",
+          "detail": null,
+          "line": 37
+        }
+      ],
+      "env": [],
+      "security": [],
+      "description": null,
+      "confidence": 1,
+      "mounted": true
+    },
+    {
+      "id": "GET:/api/flows/environments:src/modules/flows/flow.routes.ts:63",
+      "method": "GET",
+      "path": "/api/flows/environments",
+      "rawPath": "/environments",
+      "group": "Flow",
+      "handlerName": "asyncHandler",
+      "file": "src/modules/flows/flow.routes.ts",
+      "line": 63,
+      "middleware": [
+        "cookieParser()",
+        "(inline)",
+        "errorHandler",
+        "requireInternalKey",
+        "requireAuth",
+        "requireVerified"
+      ],
+      "authRequired": true,
+      "guards": [
+        "requireAuth"
+      ],
+      "fields": [
+        {
+          "name": "projectKey",
+          "location": "query",
+          "type": "unknown",
+          "required": false,
+          "validations": [],
+          "source": "member-access",
+          "confidence": 0.45
+        }
+      ],
+      "responses": [
+        {
+          "status": 200,
+          "label": "OK",
+          "message": "Environments.",
+          "shape": null,
+          "line": 45
+        }
+      ],
+      "calls": [
+        {
+          "kind": "service",
+          "target": "service.listEnvironments",
+          "detail": null,
+          "line": 46
+        }
+      ],
+      "env": [],
+      "security": [],
+      "description": null,
+      "confidence": 0.8,
+      "mounted": true
+    },
+    {
+      "id": "DELETE:/api/flows/environments/:id:src/modules/flows/flow.routes.ts:64",
+      "method": "DELETE",
+      "path": "/api/flows/environments/:id",
+      "rawPath": "/environments/:id",
+      "group": "Flow",
+      "handlerName": "asyncHandler",
+      "file": "src/modules/flows/flow.routes.ts",
+      "line": 64,
+      "middleware": [
+        "cookieParser()",
+        "(inline)",
+        "errorHandler",
+        "requireInternalKey",
+        "requireAuth",
+        "requireVerified"
+      ],
+      "authRequired": true,
+      "guards": [
+        "requireAuth"
+      ],
+      "fields": [
+        {
+          "name": "id",
+          "location": "path",
+          "type": "string",
+          "required": true,
+          "validations": [],
+          "source": "path-token",
+          "confidence": 1
+        }
+      ],
+      "responses": [
+        {
+          "status": 200,
+          "label": "OK",
+          "message": "Environment deleted.",
+          "shape": null,
+          "line": 53
+        }
+      ],
+      "calls": [
+        {
+          "kind": "service",
+          "target": "service.deleteEnvironment",
+          "detail": null,
+          "line": 52
+        }
+      ],
+      "env": [],
+      "security": [
+        {
+          "type": "possible-idor",
+          "severity": "medium",
+          "description": "Takes a resource id and is authenticated, but no ownership or tenant check was detected — verify the caller may access that record.",
+          "file": "src/modules/flows/flow.routes.ts",
+          "line": 64
+        }
+      ],
+      "description": null,
+      "confidence": 0.8,
+      "mounted": true
+    },
+    {
+      "id": "GET:/api/flows/runs/:runId:src/modules/flows/flow.routes.ts:71",
+      "method": "GET",
+      "path": "/api/flows/runs/:runId",
+      "rawPath": "/runs/:runId",
+      "group": "Flow",
+      "handlerName": "asyncHandler",
+      "file": "src/modules/flows/flow.routes.ts",
+      "line": 71,
+      "middleware": [
+        "cookieParser()",
+        "(inline)",
+        "errorHandler",
+        "requireInternalKey",
+        "requireAuth",
+        "requireVerified"
+      ],
+      "authRequired": true,
+      "guards": [
+        "requireAuth"
+      ],
+      "fields": [
+        {
+          "name": "runId",
+          "location": "path",
+          "type": "string",
+          "required": true,
+          "validations": [],
+          "source": "path-token",
+          "confidence": 1
+        }
+      ],
+      "responses": [
+        {
+          "status": 200,
+          "label": "OK",
+          "message": "Run.",
+          "shape": null,
+          "line": 110
+        }
+      ],
+      "calls": [
+        {
+          "kind": "service",
+          "target": "service.getRun",
+          "detail": null,
+          "line": 110
+        }
+      ],
+      "env": [],
+      "security": [
+        {
+          "type": "possible-idor",
+          "severity": "medium",
+          "description": "Takes a resource id and is authenticated, but no ownership or tenant check was detected — verify the caller may access that record.",
+          "file": "src/modules/flows/flow.routes.ts",
+          "line": 71
+        }
+      ],
+      "description": null,
+      "confidence": 0.8,
+      "mounted": true
+    },
+    {
+      "id": "GET:/api/flows/runs/:runId/export:src/modules/flows/flow.routes.ts:70",
+      "method": "GET",
+      "path": "/api/flows/runs/:runId/export",
+      "rawPath": "/runs/:runId/export",
+      "group": "Flow",
+      "handlerName": "asyncHandler",
+      "file": "src/modules/flows/flow.routes.ts",
+      "line": 70,
+      "middleware": [
+        "cookieParser()",
+        "(inline)",
+        "errorHandler",
+        "requireInternalKey",
+        "requireAuth",
+        "requireVerified"
+      ],
+      "authRequired": true,
+      "guards": [
+        "requireAuth"
+      ],
+      "fields": [
+        {
+          "name": "runId",
+          "location": "path",
+          "type": "string",
+          "required": true,
+          "validations": [],
+          "source": "path-token",
+          "confidence": 1
+        },
+        {
+          "name": "format",
+          "location": "query",
+          "type": "unknown",
+          "required": false,
+          "validations": [],
+          "source": "member-access",
+          "confidence": 0.45
+        }
+      ],
+      "responses": [
+        {
+          "status": 200,
+          "label": "OK",
+          "message": null,
+          "shape": null,
+          "line": 128
+        }
+      ],
+      "calls": [
+        {
+          "kind": "service",
+          "target": "service.exportRun",
+          "detail": null,
+          "line": 124
+        }
+      ],
+      "env": [],
+      "security": [
+        {
+          "type": "possible-idor",
+          "severity": "medium",
+          "description": "Takes a resource id and is authenticated, but no ownership or tenant check was detected — verify the caller may access that record.",
+          "file": "src/modules/flows/flow.routes.ts",
+          "line": 70
+        }
+      ],
+      "description": null,
+      "confidence": 0.8,
+      "mounted": true
+    },
+    {
+      "id": "POST:/api/flows/tick:src/modules/flows/flow.routes.ts:42",
+      "method": "POST",
+      "path": "/api/flows/tick",
+      "rawPath": "/tick",
+      "group": "Flow",
+      "handlerName": "asyncHandler",
+      "file": "src/modules/flows/flow.routes.ts",
+      "line": 42,
+      "middleware": [
+        "cookieParser()",
+        "(inline)",
+        "errorHandler",
+        "requireInternalKey",
+        "requireAuth",
+        "requireVerified"
+      ],
+      "authRequired": true,
+      "guards": [
+        "requireAuth"
+      ],
+      "fields": [],
+      "responses": [
+        {
+          "status": 200,
+          "label": "OK",
+          "message": "Tick.",
+          "shape": null,
+          "line": 175
+        }
+      ],
+      "calls": [],
+      "env": [],
+      "security": [],
+      "description": null,
+      "confidence": 0.65,
+      "mounted": true
+    },
+    {
+      "id": "GET:/api/health:src/routes/index.ts:8",
+      "method": "GET",
+      "path": "/api/health",
+      "rawPath": "/health",
+      "group": "Index",
+      "handlerName": "handler",
+      "file": "src/routes/index.ts",
+      "line": 8,
+      "middleware": [
+        "cookieParser()",
+        "(inline)",
+        "errorHandler"
+      ],
+      "authRequired": false,
+      "guards": [],
+      "fields": [],
+      "responses": [],
+      "calls": [],
+      "env": [],
+      "security": [],
+      "description": null,
+      "confidence": 0.5,
+      "mounted": true
+    },
+    {
+      "id": "GET:/api-docs.json:src/config/swagger.ts:142",
+      "method": "GET",
+      "path": "/api-docs.json",
+      "rawPath": "/api-docs.json",
+      "group": "Swagger",
+      "handlerName": "handler",
+      "file": "src/config/swagger.ts",
+      "line": 142,
+      "middleware": [],
+      "authRequired": false,
+      "guards": [],
+      "fields": [],
+      "responses": [],
+      "calls": [],
+      "env": [],
+      "security": [],
+      "description": null,
+      "confidence": 0.5,
+      "mounted": true
+    }
+  ],
+  "groups": [
+    {
+      "name": "App",
+      "basePath": "/",
+      "file": "app.ts",
+      "routeIds": [
+        "GET:/:app.ts:46"
+      ]
+    },
+    {
+      "name": "Auth",
+      "basePath": "/api/auth",
+      "file": "src/modules/auth/auth.routes.ts",
+      "routeIds": [
+        "POST:/api/auth/register:src/modules/auth/auth.routes.ts:39",
+        "POST:/api/auth/login:src/modules/auth/auth.routes.ts:40",
+        "POST:/api/auth/verify-email:src/modules/auth/auth.routes.ts:42",
+        "POST:/api/auth/resend-code:src/modules/auth/auth.routes.ts:43",
+        "POST:/api/auth/forgot-password:src/modules/auth/auth.routes.ts:45",
+        "POST:/api/auth/reset-password:src/modules/auth/auth.routes.ts:46",
+        "GET:/api/auth/me:src/modules/auth/auth.routes.ts:48",
+        "POST:/api/auth/logout:src/modules/auth/auth.routes.ts:49",
+        "POST:/api/auth/onboarding:src/modules/auth/auth.routes.ts:50"
+      ]
+    },
+    {
+      "name": "Flow",
+      "basePath": "/api/flows",
+      "file": "src/modules/flows/flow.routes.ts",
+      "routeIds": [
+        "POST:/api/flows/tick:src/modules/flows/flow.routes.ts:42",
+        "GET:/api/flows/capabilities:src/modules/flows/flow.routes.ts:60",
+        "POST:/api/flows/environments:src/modules/flows/flow.routes.ts:62",
+        "GET:/api/flows/environments:src/modules/flows/flow.routes.ts:63",
+        "DELETE:/api/flows/environments/:id:src/modules/flows/flow.routes.ts:64",
+        "POST:/api/flows:src/modules/flows/flow.routes.ts:66",
+        "GET:/api/flows:src/modules/flows/flow.routes.ts:67",
+        "GET:/api/flows/runs/:runId/export:src/modules/flows/flow.routes.ts:70",
+        "GET:/api/flows/runs/:runId:src/modules/flows/flow.routes.ts:71",
+        "DELETE:/api/flows/:id:src/modules/flows/flow.routes.ts:73",
+        "PUT:/api/flows/:id/recipients:src/modules/flows/flow.routes.ts:74",
+        "POST:/api/flows/:id/run:src/modules/flows/flow.routes.ts:75",
+        "GET:/api/flows/:id/runs:src/modules/flows/flow.routes.ts:76",
+        "GET:/api/flows/:id/schedule:src/modules/flows/flow.routes.ts:78",
+        "PUT:/api/flows/:id/schedule:src/modules/flows/flow.routes.ts:79",
+        "DELETE:/api/flows/:id/schedule:src/modules/flows/flow.routes.ts:80"
+      ]
+    },
+    {
+      "name": "Index",
+      "basePath": "/api",
+      "file": "src/routes/index.ts",
+      "routeIds": [
+        "GET:/api/health:src/routes/index.ts:8"
+      ]
+    },
+    {
+      "name": "Swagger",
+      "basePath": "/",
+      "file": "src/config/swagger.ts",
+      "routeIds": [
+        "GET:/api-docs.json:src/config/swagger.ts:142"
+      ]
+    }
+  ],
+  "models": [],
+  "conflicts": [],
+  "port": {
+    "port": 5005,
+    "source": ".env PORT",
+    "file": ".env",
+    "confidence": 0.85
+  },
+  "baseUrl": "http://localhost:5005",
+  "env": [
+    "K_REVISION",
+    "NODE_ENV",
+    "PORT"
+  ],
+  "stats": {
+    "filesSeen": 40,
+    "filesParsed": 39,
+    "routes": 28,
+    "groups": 5,
+    "issues": 13,
+    "durationMs": 43,
+    "skipped": []
+  }
+}

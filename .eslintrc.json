@@ -1,0 +1,121 @@
+{
+  "root": true,
+  "parser": "@typescript-eslint/parser",
+  "plugins": ["@typescript-eslint"],
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended"
+  ],
+  "parserOptions": {
+    "ecmaVersion": 2022,
+    "sourceType": "module"
+  },
+  "env": {
+    "node": true,
+    "es2022": true
+  },
+  "rules": {
+    "no-restricted-imports": "off",
+    "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/no-unused-vars": "off",
+    "@typescript-eslint/no-namespace": "off",
+    "@typescript-eslint/ban-types": "off",
+    "no-useless-escape": "off"
+  },
+  "overrides": [
+    {
+      "files": ["src/modules/**/*.service.ts"],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "paths": [
+              {
+                "name": "pg",
+                "message": "Services must not access the DB directly — use a Repository instead."
+              },
+              {
+                "name": "@supabase/supabase-js",
+                "message": "Services must not access Supabase Storage/DB directly — use a Repository/FileService instead."
+              }
+            ],
+            "patterns": [
+              {
+                "group": ["**/db/**", "**/db"],
+                "message": "Services must not import database schemas directly — use repositories instead."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": ["src/modules/**/*.controller.ts"],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "paths": [
+              {
+                "name": "pg",
+                "message": "Controllers must not access the DB directly — use a Service/Repository instead."
+              },
+              {
+                "name": "@supabase/supabase-js",
+                "message": "Controllers must not access Supabase Storage/DB directly — use a Service/FileService instead."
+              }
+            ],
+            "patterns": [
+              {
+                "group": ["**/db/**", "**/db"],
+                "message": "Controllers must not import database schemas directly — use services instead."
+              },
+              {
+                "group": ["**/repositories/**", "**/repositories"],
+                "message": "Controllers must not access repositories directly — they must go through a Service."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": ["src/scoring/**/*.ts"],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "paths": [
+              {
+                "name": "pg",
+                "message": "Scoring files must stay pure with zero I/O — do not import database drivers."
+              },
+              {
+                "name": "@supabase/supabase-js",
+                "message": "Scoring files must stay pure with zero I/O — do not import Supabase."
+              },
+              {
+                "name": "axios",
+                "message": "Scoring files must stay pure with zero I/O — do not make HTTP requests."
+              },
+              {
+                "name": "node-fetch",
+                "message": "Scoring files must stay pure with zero I/O — do not make HTTP requests."
+              }
+            ],
+            "patterns": [
+              {
+                "group": ["**/repositories/**", "**/repositories"],
+                "message": "Scoring files must stay pure with zero I/O — do not query repositories."
+              },
+              {
+                "group": ["**/providers/**", "**/providers"],
+                "message": "Scoring files must stay pure with zero I/O — do not query platform providers."
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}
