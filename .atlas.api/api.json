@@ -1,8 +1,8 @@
 {
-  "id": "232a356c5ffd",
+  "id": "f9d1454fd99c",
   "name": "Backend",
-  "path": "/Users/ashwinsevak/Desktop/Ashwin Sevak/Projects/Atlas/Backend",
-  "origin": "disk",
+  "path": "",
+  "origin": "upload",
   "framework": "express",
   "frameworks": [
     "express"
@@ -10,7 +10,7 @@
   "languages": [
     "typescript"
   ],
-  "scannedAt": 1787076630986,
+  "scannedAt": 1787394882075,
   "routes": [
     {
       "id": "GET:/:app.ts:46",
@@ -1019,14 +1019,14 @@
       "mounted": true
     },
     {
-      "id": "POST:/api/flows:src/modules/flows/flow.routes.ts:66",
+      "id": "POST:/api/flows:src/modules/flows/flow.routes.ts:67",
       "method": "POST",
       "path": "/api/flows",
       "rawPath": "/",
       "group": "Flow",
       "handlerName": "asyncHandler",
       "file": "src/modules/flows/flow.routes.ts",
-      "line": 66,
+      "line": 67,
       "middleware": [
         "cookieParser()",
         "(inline)",
@@ -1157,6 +1157,16 @@
           "target": "service.uploadFlow",
           "detail": null,
           "line": 60
+        },
+        {
+          "kind": "db",
+          "target": "one",
+          "detail": "via flow.service.uploadFlow → flow.repository.upsertFlow",
+          "line": 184,
+          "operation": "write",
+          "rawSql": "insert into flows (user_id, environment_id, project_key, client_flow_id, name, definition_encrypted, definition_iv, definition_tag, key_version, summary, step_count, hosts, recipients) values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10::jsonb, $11, $12, $13) on conflict (user_id, project_key, client_flow_id) do update set environment_id = excluded.environment_id, name = excluded.name, definition_encrypted = excluded.definition_encrypted, definition_iv = excluded.definition_iv, definition_tag = excluded.definition_tag, key_version = excluded.key_version, summary = excluded.summary, step_count = excluded.step_count, hosts = excluded.hosts, recipients = excluded.recipients, deleted_at = null returning *",
+          "query": "insert into flows (user_id, environment_id, project_key, client_flow_id, name, definition_encrypted, definition_iv, definition_tag, key_version, summary, step_count, hosts, recipients) values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10::jsonb, $11, $12, $13) on conflict (user_id, project_key, client_flow_id) do update set environment_id = excluded.environment_id, name = excluded.name, definition_encrypted = excluded.definition_encrypted, definition_iv = excluded.definition_iv, definition_tag = excluded.definition_tag, key_version = excluded.key_version, summary = excluded.summary, step_count = excluded.step_count, hosts = excluded.hosts, recipients = excluded.recipients, deleted_at = null returning *",
+          "table": "flows"
         }
       ],
       "env": [],
@@ -1166,14 +1176,14 @@
       "mounted": true
     },
     {
-      "id": "GET:/api/flows:src/modules/flows/flow.routes.ts:67",
+      "id": "GET:/api/flows:src/modules/flows/flow.routes.ts:68",
       "method": "GET",
       "path": "/api/flows",
       "rawPath": "/",
       "group": "Flow",
       "handlerName": "asyncHandler",
       "file": "src/modules/flows/flow.routes.ts",
-      "line": 67,
+      "line": 68,
       "middleware": [
         "cookieParser()",
         "(inline)",
@@ -1221,14 +1231,14 @@
       "mounted": true
     },
     {
-      "id": "DELETE:/api/flows/:id:src/modules/flows/flow.routes.ts:73",
+      "id": "DELETE:/api/flows/:id:src/modules/flows/flow.routes.ts:74",
       "method": "DELETE",
       "path": "/api/flows/:id",
       "rawPath": "/:id",
       "group": "Flow",
       "handlerName": "asyncHandler",
       "file": "src/modules/flows/flow.routes.ts",
-      "line": 73,
+      "line": 74,
       "middleware": [
         "cookieParser()",
         "(inline)",
@@ -1256,7 +1266,7 @@
         {
           "status": 200,
           "label": "OK",
-          "message": "Flow removed from the server.",
+          "message": null,
           "shape": null,
           "line": 73
         }
@@ -1267,6 +1277,36 @@
           "target": "service.deleteFlow",
           "detail": null,
           "line": 72
+        },
+        {
+          "kind": "db",
+          "target": "queryOne",
+          "detail": "via flow.service.deleteFlow → flow.repository.hasScheduleForFlow",
+          "line": 265,
+          "operation": "read",
+          "rawSql": "select id from flow_schedules where flow_id = $1 and user_id = $2 limit 1",
+          "query": "select id from flow_schedules where flow_id = $1 and user_id = $2 limit 1",
+          "table": "flow_schedules"
+        },
+        {
+          "kind": "db",
+          "target": "query",
+          "detail": "via flow.service.deleteFlow → flow.repository.softDeleteFlow",
+          "line": 241,
+          "operation": "update",
+          "rawSql": "update flows set deleted_at = now() where id = $1 and user_id = $2 and deleted_at is null returning id",
+          "query": "update flows set deleted_at = now() where id = $1 and user_id = $2 and deleted_at is null returning id",
+          "table": "flows"
+        },
+        {
+          "kind": "db",
+          "target": "query",
+          "detail": "via flow.service.deleteFlow → flow.repository.softDeleteFlow",
+          "line": 253,
+          "operation": "update",
+          "rawSql": "update flow_schedules set enabled = false, next_run_at = null, disabled_reason = 'Flow was deleted.' where flow_id = $1",
+          "query": "update flow_schedules set enabled = false, next_run_at = null, disabled_reason = 'Flow was deleted.' where flow_id = $1",
+          "table": "flow_schedules"
         }
       ],
       "env": [],
@@ -1276,7 +1316,7 @@
           "severity": "medium",
           "description": "Takes a resource id and is authenticated, but no ownership or tenant check was detected — verify the caller may access that record.",
           "file": "src/modules/flows/flow.routes.ts",
-          "line": 73
+          "line": 74
         }
       ],
       "description": null,
@@ -1284,14 +1324,14 @@
       "mounted": true
     },
     {
-      "id": "PUT:/api/flows/:id/recipients:src/modules/flows/flow.routes.ts:74",
+      "id": "PUT:/api/flows/:id/recipients:src/modules/flows/flow.routes.ts:75",
       "method": "PUT",
       "path": "/api/flows/:id/recipients",
       "rawPath": "/:id/recipients",
       "group": "Flow",
       "handlerName": "asyncHandler",
       "file": "src/modules/flows/flow.routes.ts",
-      "line": 74,
+      "line": 75,
       "middleware": [
         "cookieParser()",
         "(inline)",
@@ -1336,7 +1376,7 @@
           "label": "OK",
           "message": "Recipients updated.",
           "shape": null,
-          "line": 80
+          "line": 86
         }
       ],
       "calls": [
@@ -1344,7 +1384,17 @@
           "kind": "service",
           "target": "service.updateRecipients",
           "detail": null,
-          "line": 79
+          "line": 85
+        },
+        {
+          "kind": "db",
+          "target": "one",
+          "detail": "via flow.service.updateRecipients → flow.repository.setRecipients",
+          "line": 279,
+          "operation": "update",
+          "rawSql": "update flows set recipients = $3 where id = $1 and user_id = $2 and deleted_at is null returning *",
+          "query": "update flows set recipients = $3 where id = $1 and user_id = $2 and deleted_at is null returning *",
+          "table": "flows"
         }
       ],
       "env": [],
@@ -1354,7 +1404,7 @@
           "severity": "medium",
           "description": "Takes a resource id and is authenticated, but no ownership or tenant check was detected — verify the caller may access that record.",
           "file": "src/modules/flows/flow.routes.ts",
-          "line": 74
+          "line": 75
         }
       ],
       "description": null,
@@ -1362,14 +1412,14 @@
       "mounted": true
     },
     {
-      "id": "POST:/api/flows/:id/run:src/modules/flows/flow.routes.ts:75",
+      "id": "POST:/api/flows/:id/run:src/modules/flows/flow.routes.ts:76",
       "method": "POST",
       "path": "/api/flows/:id/run",
       "rawPath": "/:id/run",
       "group": "Flow",
       "handlerName": "asyncHandler",
       "file": "src/modules/flows/flow.routes.ts",
-      "line": 75,
+      "line": 76,
       "middleware": [
         "cookieParser()",
         "(inline)",
@@ -1400,7 +1450,7 @@
           "label": "OK",
           "message": "Run finished: {outcome.run.status}.",
           "shape": null,
-          "line": 97
+          "line": 103
         }
       ],
       "calls": [
@@ -1408,7 +1458,7 @@
           "kind": "service",
           "target": "service.runStoredFlow",
           "detail": null,
-          "line": 96
+          "line": 102
         },
         {
           "kind": "db",
@@ -1424,7 +1474,7 @@
           "kind": "db",
           "target": "one",
           "detail": "via flow.service.runStoredFlow → flow.repository.createRun",
-          "line": 266,
+          "line": 293,
           "operation": "write",
           "rawSql": "insert into flow_runs (flow_id, user_id, trigger, status, started_at) values ($1, $2, $3, 'running', now()) returning *",
           "query": "insert into flow_runs (flow_id, user_id, trigger, status, started_at) values ($1, $2, $3, 'running', now()) returning *",
@@ -1434,7 +1484,7 @@
           "kind": "db",
           "target": "run",
           "detail": "via flow.service.runStoredFlow → flow.repository.finishRun",
-          "line": 286,
+          "line": 313,
           "operation": "update",
           "rawSql": "update flow_runs set status = $2, total_steps = $3, passed_steps = $4, failed_steps = $5, skipped_steps = $6, duration_ms = $7, error = $8, finished_at = now() where id = $1",
           "query": "update flow_runs set status = $2, total_steps = $3, passed_steps = $4, failed_steps = $5, skipped_steps = $6, duration_ms = $7, error = $8, finished_at = now() where id = $1",
@@ -1444,7 +1494,7 @@
           "kind": "db",
           "target": "run",
           "detail": "via flow.service.runStoredFlow → flow.repository.finishRun",
-          "line": 330,
+          "line": 357,
           "operation": "write",
           "rawSql": "insert into flow_run_steps (run_id, position, node_id, name, method, url, status, status_code, duration_ms, error) values $?",
           "query": "insert into flow_run_steps (run_id, position, node_id, name, method, url, status, status_code, duration_ms, error) values $?",
@@ -1454,7 +1504,7 @@
           "kind": "db",
           "target": "run",
           "detail": "via flow.service.runStoredFlow → flow.repository.finishRun",
-          "line": 342,
+          "line": 369,
           "operation": "update",
           "rawSql": "update flow_run_steps set response_excerpt = $3 where run_id = $1 and position = $2",
           "query": "update flow_run_steps set response_excerpt = $3 where run_id = $1 and position = $2",
@@ -1464,7 +1514,7 @@
           "kind": "db",
           "target": "query",
           "detail": "via flow.service.runStoredFlow → flow.repository.markRunError",
-          "line": 351,
+          "line": 378,
           "operation": "update",
           "rawSql": "update flow_runs set status = 'error', error = $2, finished_at = now() where id = $1",
           "query": "update flow_runs set status = 'error', error = $2, finished_at = now() where id = $1",
@@ -1474,7 +1524,7 @@
           "kind": "db",
           "target": "query",
           "detail": "via flow.service.runStoredFlow → flow.repository.touchFlowRun",
-          "line": 362,
+          "line": 389,
           "operation": "update",
           "rawSql": "update flows set last_run_at = now() where id = $1",
           "query": "update flows set last_run_at = now() where id = $1",
@@ -1484,7 +1534,7 @@
           "kind": "db",
           "target": "queryOne",
           "detail": "via flow.service.runStoredFlow → flow.repository.findRun",
-          "line": 366,
+          "line": 393,
           "operation": "read",
           "rawSql": "select * from flow_runs where id = $1 and user_id = $2",
           "query": "select * from flow_runs where id = $1 and user_id = $2",
@@ -1494,7 +1544,7 @@
           "kind": "db",
           "target": "query",
           "detail": "via flow.service.runStoredFlow → flow.repository.listRunSteps",
-          "line": 378,
+          "line": 405,
           "operation": "read",
           "rawSql": "select * from flow_run_steps where run_id = $1 order by position",
           "query": "select * from flow_run_steps where run_id = $1 order by position",
@@ -1504,7 +1554,7 @@
           "kind": "db",
           "target": "query",
           "detail": "via flow.service.runStoredFlow → flow.repository.markReportSent",
-          "line": 358,
+          "line": 385,
           "operation": "update",
           "rawSql": "update flow_runs set report_sent = true where id = $1",
           "query": "update flow_runs set report_sent = true where id = $1",
@@ -1518,7 +1568,7 @@
           "severity": "medium",
           "description": "Takes a resource id and is authenticated, but no ownership or tenant check was detected — verify the caller may access that record.",
           "file": "src/modules/flows/flow.routes.ts",
-          "line": 75
+          "line": 76
         }
       ],
       "description": null,
@@ -1526,14 +1576,14 @@
       "mounted": true
     },
     {
-      "id": "GET:/api/flows/:id/runs:src/modules/flows/flow.routes.ts:76",
+      "id": "GET:/api/flows/:id/runs:src/modules/flows/flow.routes.ts:77",
       "method": "GET",
       "path": "/api/flows/:id/runs",
       "rawPath": "/:id/runs",
       "group": "Flow",
       "handlerName": "asyncHandler",
       "file": "src/modules/flows/flow.routes.ts",
-      "line": 76,
+      "line": 77,
       "middleware": [
         "cookieParser()",
         "(inline)",
@@ -1572,7 +1622,7 @@
           "label": "OK",
           "message": "Runs.",
           "shape": null,
-          "line": 103
+          "line": 109
         }
       ],
       "calls": [
@@ -1580,7 +1630,7 @@
           "kind": "service",
           "target": "service.listRuns",
           "detail": null,
-          "line": 104
+          "line": 110
         }
       ],
       "env": [],
@@ -1590,7 +1640,7 @@
           "severity": "medium",
           "description": "Takes a resource id and is authenticated, but no ownership or tenant check was detected — verify the caller may access that record.",
           "file": "src/modules/flows/flow.routes.ts",
-          "line": 76
+          "line": 77
         }
       ],
       "description": null,
@@ -1598,14 +1648,14 @@
       "mounted": true
     },
     {
-      "id": "GET:/api/flows/:id/schedule:src/modules/flows/flow.routes.ts:78",
+      "id": "GET:/api/flows/:id/schedule:src/modules/flows/flow.routes.ts:79",
       "method": "GET",
       "path": "/api/flows/:id/schedule",
       "rawPath": "/:id/schedule",
       "group": "Flow",
       "handlerName": "asyncHandler",
       "file": "src/modules/flows/flow.routes.ts",
-      "line": 78,
+      "line": 79,
       "middleware": [
         "cookieParser()",
         "(inline)",
@@ -1635,7 +1685,7 @@
           "label": "OK",
           "message": "Schedule.",
           "shape": null,
-          "line": 135
+          "line": 141
         }
       ],
       "calls": [],
@@ -1646,7 +1696,7 @@
           "severity": "medium",
           "description": "Takes a resource id and is authenticated, but no ownership or tenant check was detected — verify the caller may access that record.",
           "file": "src/modules/flows/flow.routes.ts",
-          "line": 78
+          "line": 79
         }
       ],
       "description": null,
@@ -1654,14 +1704,14 @@
       "mounted": true
     },
     {
-      "id": "PUT:/api/flows/:id/schedule:src/modules/flows/flow.routes.ts:79",
+      "id": "PUT:/api/flows/:id/schedule:src/modules/flows/flow.routes.ts:80",
       "method": "PUT",
       "path": "/api/flows/:id/schedule",
       "rawPath": "/:id/schedule",
       "group": "Flow",
       "handlerName": "asyncHandler",
       "file": "src/modules/flows/flow.routes.ts",
-      "line": 79,
+      "line": 80,
       "middleware": [
         "cookieParser()",
         "(inline)",
@@ -1789,7 +1839,7 @@
           "label": "OK",
           "message": null,
           "shape": null,
-          "line": 147
+          "line": 153
         }
       ],
       "calls": [],
@@ -1800,7 +1850,7 @@
           "severity": "medium",
           "description": "Takes a resource id and is authenticated, but no ownership or tenant check was detected — verify the caller may access that record.",
           "file": "src/modules/flows/flow.routes.ts",
-          "line": 79
+          "line": 80
         }
       ],
       "description": null,
@@ -1808,14 +1858,14 @@
       "mounted": true
     },
     {
-      "id": "DELETE:/api/flows/:id/schedule:src/modules/flows/flow.routes.ts:80",
+      "id": "DELETE:/api/flows/:id/schedule:src/modules/flows/flow.routes.ts:82",
       "method": "DELETE",
       "path": "/api/flows/:id/schedule",
       "rawPath": "/:id/schedule",
       "group": "Flow",
       "handlerName": "asyncHandler",
       "file": "src/modules/flows/flow.routes.ts",
-      "line": 80,
+      "line": 82,
       "middleware": [
         "cookieParser()",
         "(inline)",
@@ -1845,7 +1895,7 @@
           "label": "OK",
           "message": "Schedule removed.",
           "shape": null,
-          "line": 155
+          "line": 161
         }
       ],
       "calls": [],
@@ -1856,7 +1906,7 @@
           "severity": "medium",
           "description": "Takes a resource id and is authenticated, but no ownership or tenant check was detected — verify the caller may access that record.",
           "file": "src/modules/flows/flow.routes.ts",
-          "line": 80
+          "line": 82
         }
       ],
       "description": null,
@@ -1864,14 +1914,97 @@
       "mounted": true
     },
     {
-      "id": "GET:/api/flows/capabilities:src/modules/flows/flow.routes.ts:60",
+      "id": "PATCH:/api/flows/:id/schedule/pause:src/modules/flows/flow.routes.ts:81",
+      "method": "PATCH",
+      "path": "/api/flows/:id/schedule/pause",
+      "rawPath": "/:id/schedule/pause",
+      "group": "Flow",
+      "handlerName": "asyncHandler",
+      "file": "src/modules/flows/flow.routes.ts",
+      "line": 81,
+      "middleware": [
+        "cookieParser()",
+        "(inline)",
+        "errorHandler",
+        "requireInternalKey",
+        "requireAuth",
+        "requireVerified"
+      ],
+      "authRequired": true,
+      "guards": [
+        "requireAuth"
+      ],
+      "fields": [
+        {
+          "name": "id",
+          "location": "path",
+          "type": "string",
+          "required": true,
+          "validations": [],
+          "source": "path-token",
+          "confidence": 1
+        }
+      ],
+      "responses": [
+        {
+          "status": 200,
+          "label": "OK",
+          "message": "Schedule paused. Your settings are saved — re-enable it any time.",
+          "shape": null,
+          "line": 174
+        }
+      ],
+      "calls": [
+        {
+          "kind": "service",
+          "target": "service.pauseSchedule",
+          "detail": null,
+          "line": 173
+        },
+        {
+          "kind": "db",
+          "target": "queryOne",
+          "detail": "via flow.service.pauseSchedule → flow.repository.findSchedule",
+          "line": 458,
+          "operation": "read",
+          "rawSql": "select * from flow_schedules where flow_id = $1 and user_id = $2",
+          "query": "select * from flow_schedules where flow_id = $1 and user_id = $2",
+          "table": "flow_schedules"
+        },
+        {
+          "kind": "db",
+          "target": "one",
+          "detail": "via flow.service.pauseSchedule → flow.repository.upsertSchedule",
+          "line": 439,
+          "operation": "write",
+          "rawSql": "insert into flow_schedules (flow_id, user_id, enabled, kind, cron, timezone, next_run_at) values ($1, $2, $3, $4, $5, $6, $7) on conflict (flow_id) do update set enabled = excluded.enabled, kind = excluded.kind, cron = excluded.cron, timezone = excluded.timezone, next_run_at = excluded.next_run_at, consecutive_failures = 0, disabled_reason = null, claimed_at = null, claimed_by = null returning *",
+          "query": "insert into flow_schedules (flow_id, user_id, enabled, kind, cron, timezone, next_run_at) values ($1, $2, $3, $4, $5, $6, $7) on conflict (flow_id) do update set enabled = excluded.enabled, kind = excluded.kind, cron = excluded.cron, timezone = excluded.timezone, next_run_at = excluded.next_run_at, consecutive_failures = 0, disabled_reason = null, claimed_at = null, claimed_by = null returning *",
+          "table": "flow_schedules"
+        }
+      ],
+      "env": [],
+      "security": [
+        {
+          "type": "possible-idor",
+          "severity": "medium",
+          "description": "Takes a resource id and is authenticated, but no ownership or tenant check was detected — verify the caller may access that record.",
+          "file": "src/modules/flows/flow.routes.ts",
+          "line": 81
+        }
+      ],
+      "description": null,
+      "confidence": 0.8,
+      "mounted": true
+    },
+    {
+      "id": "GET:/api/flows/capabilities:src/modules/flows/flow.routes.ts:61",
       "method": "GET",
       "path": "/api/flows/capabilities",
       "rawPath": "/capabilities",
       "group": "Flow",
       "handlerName": "asyncHandler",
       "file": "src/modules/flows/flow.routes.ts",
-      "line": 60,
+      "line": 61,
       "middleware": [
         "cookieParser()",
         "(inline)",
@@ -1902,14 +2035,14 @@
       "mounted": true
     },
     {
-      "id": "POST:/api/flows/environments:src/modules/flows/flow.routes.ts:62",
+      "id": "POST:/api/flows/environments:src/modules/flows/flow.routes.ts:63",
       "method": "POST",
       "path": "/api/flows/environments",
       "rawPath": "/environments",
       "group": "Flow",
       "handlerName": "asyncHandler",
       "file": "src/modules/flows/flow.routes.ts",
-      "line": 62,
+      "line": 63,
       "middleware": [
         "cookieParser()",
         "(inline)",
@@ -1993,6 +2126,16 @@
           "target": "service.saveEnvironment",
           "detail": null,
           "line": 37
+        },
+        {
+          "kind": "db",
+          "target": "one",
+          "detail": "via flow.service.saveEnvironment → flow.repository.upsertEnvironment",
+          "line": 114,
+          "operation": "write",
+          "rawSql": "insert into flow_environments (user_id, project_key, name, values_encrypted, values_iv, values_tag, key_version, value_keys) values ($1, $2, $3, $4, $5, $6, $7, $8) on conflict (user_id, project_key, name) do update set values_encrypted = excluded.values_encrypted, values_iv = excluded.values_iv, values_tag = excluded.values_tag, key_version = excluded.key_version, value_keys = excluded.value_keys returning *",
+          "query": "insert into flow_environments (user_id, project_key, name, values_encrypted, values_iv, values_tag, key_version, value_keys) values ($1, $2, $3, $4, $5, $6, $7, $8) on conflict (user_id, project_key, name) do update set values_encrypted = excluded.values_encrypted, values_iv = excluded.values_iv, values_tag = excluded.values_tag, key_version = excluded.key_version, value_keys = excluded.value_keys returning *",
+          "table": "flow_environments"
         }
       ],
       "env": [],
@@ -2002,14 +2145,14 @@
       "mounted": true
     },
     {
-      "id": "GET:/api/flows/environments:src/modules/flows/flow.routes.ts:63",
+      "id": "GET:/api/flows/environments:src/modules/flows/flow.routes.ts:64",
       "method": "GET",
       "path": "/api/flows/environments",
       "rawPath": "/environments",
       "group": "Flow",
       "handlerName": "asyncHandler",
       "file": "src/modules/flows/flow.routes.ts",
-      "line": 63,
+      "line": 64,
       "middleware": [
         "cookieParser()",
         "(inline)",
@@ -2057,14 +2200,14 @@
       "mounted": true
     },
     {
-      "id": "DELETE:/api/flows/environments/:id:src/modules/flows/flow.routes.ts:64",
+      "id": "DELETE:/api/flows/environments/:id:src/modules/flows/flow.routes.ts:65",
       "method": "DELETE",
       "path": "/api/flows/environments/:id",
       "rawPath": "/environments/:id",
       "group": "Flow",
       "handlerName": "asyncHandler",
       "file": "src/modules/flows/flow.routes.ts",
-      "line": 64,
+      "line": 65,
       "middleware": [
         "cookieParser()",
         "(inline)",
@@ -2112,7 +2255,7 @@
           "severity": "medium",
           "description": "Takes a resource id and is authenticated, but no ownership or tenant check was detected — verify the caller may access that record.",
           "file": "src/modules/flows/flow.routes.ts",
-          "line": 64
+          "line": 65
         }
       ],
       "description": null,
@@ -2120,14 +2263,14 @@
       "mounted": true
     },
     {
-      "id": "GET:/api/flows/runs/:runId:src/modules/flows/flow.routes.ts:71",
+      "id": "GET:/api/flows/runs/:runId:src/modules/flows/flow.routes.ts:72",
       "method": "GET",
       "path": "/api/flows/runs/:runId",
       "rawPath": "/runs/:runId",
       "group": "Flow",
       "handlerName": "asyncHandler",
       "file": "src/modules/flows/flow.routes.ts",
-      "line": 71,
+      "line": 72,
       "middleware": [
         "cookieParser()",
         "(inline)",
@@ -2157,7 +2300,7 @@
           "label": "OK",
           "message": "Run.",
           "shape": null,
-          "line": 110
+          "line": 116
         }
       ],
       "calls": [
@@ -2165,7 +2308,27 @@
           "kind": "service",
           "target": "service.getRun",
           "detail": null,
-          "line": 110
+          "line": 116
+        },
+        {
+          "kind": "db",
+          "target": "queryOne",
+          "detail": "via flow.service.getRun → flow.repository.findRun",
+          "line": 393,
+          "operation": "read",
+          "rawSql": "select * from flow_runs where id = $1 and user_id = $2",
+          "query": "select * from flow_runs where id = $1 and user_id = $2",
+          "table": "flow_runs"
+        },
+        {
+          "kind": "db",
+          "target": "query",
+          "detail": "via flow.service.getRun → flow.repository.listRunSteps",
+          "line": 405,
+          "operation": "read",
+          "rawSql": "select * from flow_run_steps where run_id = $1 order by position",
+          "query": "select * from flow_run_steps where run_id = $1 order by position",
+          "table": "flow_run_steps"
         }
       ],
       "env": [],
@@ -2175,7 +2338,7 @@
           "severity": "medium",
           "description": "Takes a resource id and is authenticated, but no ownership or tenant check was detected — verify the caller may access that record.",
           "file": "src/modules/flows/flow.routes.ts",
-          "line": 71
+          "line": 72
         }
       ],
       "description": null,
@@ -2183,14 +2346,14 @@
       "mounted": true
     },
     {
-      "id": "GET:/api/flows/runs/:runId/export:src/modules/flows/flow.routes.ts:70",
+      "id": "GET:/api/flows/runs/:runId/export:src/modules/flows/flow.routes.ts:71",
       "method": "GET",
       "path": "/api/flows/runs/:runId/export",
       "rawPath": "/runs/:runId/export",
       "group": "Flow",
       "handlerName": "asyncHandler",
       "file": "src/modules/flows/flow.routes.ts",
-      "line": 70,
+      "line": 71,
       "middleware": [
         "cookieParser()",
         "(inline)",
@@ -2229,7 +2392,7 @@
           "label": "OK",
           "message": null,
           "shape": null,
-          "line": 128
+          "line": 134
         }
       ],
       "calls": [
@@ -2237,7 +2400,37 @@
           "kind": "service",
           "target": "service.exportRun",
           "detail": null,
-          "line": 124
+          "line": 130
+        },
+        {
+          "kind": "db",
+          "target": "queryOne",
+          "detail": "via flow.service.exportRun → flow.repository.findRun",
+          "line": 393,
+          "operation": "read",
+          "rawSql": "select * from flow_runs where id = $1 and user_id = $2",
+          "query": "select * from flow_runs where id = $1 and user_id = $2",
+          "table": "flow_runs"
+        },
+        {
+          "kind": "db",
+          "target": "one",
+          "detail": "via flow.service.exportRun → flow.repository.findFlow",
+          "line": 222,
+          "operation": "read",
+          "rawSql": "select * from flows where id = $1 and user_id = $2 and deleted_at is null",
+          "query": "select * from flows where id = $1 and user_id = $2 and deleted_at is null",
+          "table": "flows"
+        },
+        {
+          "kind": "db",
+          "target": "query",
+          "detail": "via flow.service.exportRun → flow.repository.listRunSteps",
+          "line": 405,
+          "operation": "read",
+          "rawSql": "select * from flow_run_steps where run_id = $1 order by position",
+          "query": "select * from flow_run_steps where run_id = $1 order by position",
+          "table": "flow_run_steps"
         }
       ],
       "env": [],
@@ -2247,7 +2440,7 @@
           "severity": "medium",
           "description": "Takes a resource id and is authenticated, but no ownership or tenant check was detected — verify the caller may access that record.",
           "file": "src/modules/flows/flow.routes.ts",
-          "line": 70
+          "line": 71
         }
       ],
       "description": null,
@@ -2255,14 +2448,14 @@
       "mounted": true
     },
     {
-      "id": "POST:/api/flows/tick:src/modules/flows/flow.routes.ts:42",
+      "id": "POST:/api/flows/tick:src/modules/flows/flow.routes.ts:43",
       "method": "POST",
       "path": "/api/flows/tick",
       "rawPath": "/tick",
       "group": "Flow",
       "handlerName": "asyncHandler",
       "file": "src/modules/flows/flow.routes.ts",
-      "line": 42,
+      "line": 43,
       "middleware": [
         "cookieParser()",
         "(inline)",
@@ -2282,7 +2475,7 @@
           "label": "OK",
           "message": "Tick.",
           "shape": null,
-          "line": 175
+          "line": 194
         }
       ],
       "calls": [],
@@ -2369,22 +2562,23 @@
       "basePath": "/api/flows",
       "file": "src/modules/flows/flow.routes.ts",
       "routeIds": [
-        "POST:/api/flows/tick:src/modules/flows/flow.routes.ts:42",
-        "GET:/api/flows/capabilities:src/modules/flows/flow.routes.ts:60",
-        "POST:/api/flows/environments:src/modules/flows/flow.routes.ts:62",
-        "GET:/api/flows/environments:src/modules/flows/flow.routes.ts:63",
-        "DELETE:/api/flows/environments/:id:src/modules/flows/flow.routes.ts:64",
-        "POST:/api/flows:src/modules/flows/flow.routes.ts:66",
-        "GET:/api/flows:src/modules/flows/flow.routes.ts:67",
-        "GET:/api/flows/runs/:runId/export:src/modules/flows/flow.routes.ts:70",
-        "GET:/api/flows/runs/:runId:src/modules/flows/flow.routes.ts:71",
-        "DELETE:/api/flows/:id:src/modules/flows/flow.routes.ts:73",
-        "PUT:/api/flows/:id/recipients:src/modules/flows/flow.routes.ts:74",
-        "POST:/api/flows/:id/run:src/modules/flows/flow.routes.ts:75",
-        "GET:/api/flows/:id/runs:src/modules/flows/flow.routes.ts:76",
-        "GET:/api/flows/:id/schedule:src/modules/flows/flow.routes.ts:78",
-        "PUT:/api/flows/:id/schedule:src/modules/flows/flow.routes.ts:79",
-        "DELETE:/api/flows/:id/schedule:src/modules/flows/flow.routes.ts:80"
+        "POST:/api/flows/tick:src/modules/flows/flow.routes.ts:43",
+        "GET:/api/flows/capabilities:src/modules/flows/flow.routes.ts:61",
+        "POST:/api/flows/environments:src/modules/flows/flow.routes.ts:63",
+        "GET:/api/flows/environments:src/modules/flows/flow.routes.ts:64",
+        "DELETE:/api/flows/environments/:id:src/modules/flows/flow.routes.ts:65",
+        "POST:/api/flows:src/modules/flows/flow.routes.ts:67",
+        "GET:/api/flows:src/modules/flows/flow.routes.ts:68",
+        "GET:/api/flows/runs/:runId/export:src/modules/flows/flow.routes.ts:71",
+        "GET:/api/flows/runs/:runId:src/modules/flows/flow.routes.ts:72",
+        "DELETE:/api/flows/:id:src/modules/flows/flow.routes.ts:74",
+        "PUT:/api/flows/:id/recipients:src/modules/flows/flow.routes.ts:75",
+        "POST:/api/flows/:id/run:src/modules/flows/flow.routes.ts:76",
+        "GET:/api/flows/:id/runs:src/modules/flows/flow.routes.ts:77",
+        "GET:/api/flows/:id/schedule:src/modules/flows/flow.routes.ts:79",
+        "PUT:/api/flows/:id/schedule:src/modules/flows/flow.routes.ts:80",
+        "PATCH:/api/flows/:id/schedule/pause:src/modules/flows/flow.routes.ts:81",
+        "DELETE:/api/flows/:id/schedule:src/modules/flows/flow.routes.ts:82"
       ]
     },
     {
@@ -2406,25 +2600,20 @@
   ],
   "models": [],
   "conflicts": [],
-  "port": {
-    "port": 5005,
-    "source": ".env PORT",
-    "file": ".env",
-    "confidence": 0.85
-  },
-  "baseUrl": "http://localhost:5005",
+  "port": null,
+  "baseUrl": "http://localhost:3001",
   "env": [
     "K_REVISION",
     "NODE_ENV",
     "PORT"
   ],
   "stats": {
-    "filesSeen": 40,
+    "filesSeen": 39,
     "filesParsed": 39,
-    "routes": 28,
+    "routes": 29,
     "groups": 5,
-    "issues": 13,
-    "durationMs": 43,
+    "issues": 14,
+    "durationMs": 72,
     "skipped": []
   }
 }
