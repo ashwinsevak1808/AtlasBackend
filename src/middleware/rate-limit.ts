@@ -53,3 +53,20 @@ export const otpLimiter = rateLimit({
   skip: () => !isProduction,
   message: message('Too many codes requested. Try again in an hour.'),
 });
+
+/**
+ * Joining the product-updates list.
+ *
+ * Unthrottled, a form that writes an email address to a table is a way to fill
+ * it with somebody else's addresses. The limit is per IP and deliberately
+ * loose enough that a person who mistypes their address twice and corrects it
+ * is never stopped.
+ */
+export const subscribeLimiter = rateLimit({
+  windowMs: 60 * 60 * 1000,
+  max: 15,
+  standardHeaders: true,
+  legacyHeaders: false,
+  skip: () => !isProduction,
+  message: message('Too many attempts. Try again in an hour.'),
+});

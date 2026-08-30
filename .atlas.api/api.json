@@ -1,8 +1,8 @@
 {
-  "id": "f9d1454fd99c",
+  "id": "232a356c5ffd",
   "name": "Backend",
-  "path": "",
-  "origin": "upload",
+  "path": "/Users/ashwinsevak/Desktop/Ashwin Sevak/Projects/Atlas/Backend",
+  "origin": "disk",
   "framework": "express",
   "frameworks": [
     "express"
@@ -10,7 +10,7 @@
   "languages": [
     "typescript"
   ],
-  "scannedAt": 1787394882075,
+  "scannedAt": 1787401191566,
   "routes": [
     {
       "id": "GET:/:app.ts:46",
@@ -1157,16 +1157,6 @@
           "target": "service.uploadFlow",
           "detail": null,
           "line": 60
-        },
-        {
-          "kind": "db",
-          "target": "one",
-          "detail": "via flow.service.uploadFlow → flow.repository.upsertFlow",
-          "line": 184,
-          "operation": "write",
-          "rawSql": "insert into flows (user_id, environment_id, project_key, client_flow_id, name, definition_encrypted, definition_iv, definition_tag, key_version, summary, step_count, hosts, recipients) values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10::jsonb, $11, $12, $13) on conflict (user_id, project_key, client_flow_id) do update set environment_id = excluded.environment_id, name = excluded.name, definition_encrypted = excluded.definition_encrypted, definition_iv = excluded.definition_iv, definition_tag = excluded.definition_tag, key_version = excluded.key_version, summary = excluded.summary, step_count = excluded.step_count, hosts = excluded.hosts, recipients = excluded.recipients, deleted_at = null returning *",
-          "query": "insert into flows (user_id, environment_id, project_key, client_flow_id, name, definition_encrypted, definition_iv, definition_tag, key_version, summary, step_count, hosts, recipients) values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10::jsonb, $11, $12, $13) on conflict (user_id, project_key, client_flow_id) do update set environment_id = excluded.environment_id, name = excluded.name, definition_encrypted = excluded.definition_encrypted, definition_iv = excluded.definition_iv, definition_tag = excluded.definition_tag, key_version = excluded.key_version, summary = excluded.summary, step_count = excluded.step_count, hosts = excluded.hosts, recipients = excluded.recipients, deleted_at = null returning *",
-          "table": "flows"
         }
       ],
       "env": [],
@@ -1277,36 +1267,6 @@
           "target": "service.deleteFlow",
           "detail": null,
           "line": 72
-        },
-        {
-          "kind": "db",
-          "target": "queryOne",
-          "detail": "via flow.service.deleteFlow → flow.repository.hasScheduleForFlow",
-          "line": 265,
-          "operation": "read",
-          "rawSql": "select id from flow_schedules where flow_id = $1 and user_id = $2 limit 1",
-          "query": "select id from flow_schedules where flow_id = $1 and user_id = $2 limit 1",
-          "table": "flow_schedules"
-        },
-        {
-          "kind": "db",
-          "target": "query",
-          "detail": "via flow.service.deleteFlow → flow.repository.softDeleteFlow",
-          "line": 241,
-          "operation": "update",
-          "rawSql": "update flows set deleted_at = now() where id = $1 and user_id = $2 and deleted_at is null returning id",
-          "query": "update flows set deleted_at = now() where id = $1 and user_id = $2 and deleted_at is null returning id",
-          "table": "flows"
-        },
-        {
-          "kind": "db",
-          "target": "query",
-          "detail": "via flow.service.deleteFlow → flow.repository.softDeleteFlow",
-          "line": 253,
-          "operation": "update",
-          "rawSql": "update flow_schedules set enabled = false, next_run_at = null, disabled_reason = 'Flow was deleted.' where flow_id = $1",
-          "query": "update flow_schedules set enabled = false, next_run_at = null, disabled_reason = 'Flow was deleted.' where flow_id = $1",
-          "table": "flow_schedules"
         }
       ],
       "env": [],
@@ -1385,16 +1345,6 @@
           "target": "service.updateRecipients",
           "detail": null,
           "line": 85
-        },
-        {
-          "kind": "db",
-          "target": "one",
-          "detail": "via flow.service.updateRecipients → flow.repository.setRecipients",
-          "line": 279,
-          "operation": "update",
-          "rawSql": "update flows set recipients = $3 where id = $1 and user_id = $2 and deleted_at is null returning *",
-          "query": "update flows set recipients = $3 where id = $1 and user_id = $2 and deleted_at is null returning *",
-          "table": "flows"
         }
       ],
       "env": [],
@@ -1960,26 +1910,6 @@
           "target": "service.pauseSchedule",
           "detail": null,
           "line": 173
-        },
-        {
-          "kind": "db",
-          "target": "queryOne",
-          "detail": "via flow.service.pauseSchedule → flow.repository.findSchedule",
-          "line": 458,
-          "operation": "read",
-          "rawSql": "select * from flow_schedules where flow_id = $1 and user_id = $2",
-          "query": "select * from flow_schedules where flow_id = $1 and user_id = $2",
-          "table": "flow_schedules"
-        },
-        {
-          "kind": "db",
-          "target": "one",
-          "detail": "via flow.service.pauseSchedule → flow.repository.upsertSchedule",
-          "line": 439,
-          "operation": "write",
-          "rawSql": "insert into flow_schedules (flow_id, user_id, enabled, kind, cron, timezone, next_run_at) values ($1, $2, $3, $4, $5, $6, $7) on conflict (flow_id) do update set enabled = excluded.enabled, kind = excluded.kind, cron = excluded.cron, timezone = excluded.timezone, next_run_at = excluded.next_run_at, consecutive_failures = 0, disabled_reason = null, claimed_at = null, claimed_by = null returning *",
-          "query": "insert into flow_schedules (flow_id, user_id, enabled, kind, cron, timezone, next_run_at) values ($1, $2, $3, $4, $5, $6, $7) on conflict (flow_id) do update set enabled = excluded.enabled, kind = excluded.kind, cron = excluded.cron, timezone = excluded.timezone, next_run_at = excluded.next_run_at, consecutive_failures = 0, disabled_reason = null, claimed_at = null, claimed_by = null returning *",
-          "table": "flow_schedules"
         }
       ],
       "env": [],
@@ -2126,16 +2056,6 @@
           "target": "service.saveEnvironment",
           "detail": null,
           "line": 37
-        },
-        {
-          "kind": "db",
-          "target": "one",
-          "detail": "via flow.service.saveEnvironment → flow.repository.upsertEnvironment",
-          "line": 114,
-          "operation": "write",
-          "rawSql": "insert into flow_environments (user_id, project_key, name, values_encrypted, values_iv, values_tag, key_version, value_keys) values ($1, $2, $3, $4, $5, $6, $7, $8) on conflict (user_id, project_key, name) do update set values_encrypted = excluded.values_encrypted, values_iv = excluded.values_iv, values_tag = excluded.values_tag, key_version = excluded.key_version, value_keys = excluded.value_keys returning *",
-          "query": "insert into flow_environments (user_id, project_key, name, values_encrypted, values_iv, values_tag, key_version, value_keys) values ($1, $2, $3, $4, $5, $6, $7, $8) on conflict (user_id, project_key, name) do update set values_encrypted = excluded.values_encrypted, values_iv = excluded.values_iv, values_tag = excluded.values_tag, key_version = excluded.key_version, value_keys = excluded.value_keys returning *",
-          "table": "flow_environments"
         }
       ],
       "env": [],
@@ -2309,26 +2229,6 @@
           "target": "service.getRun",
           "detail": null,
           "line": 116
-        },
-        {
-          "kind": "db",
-          "target": "queryOne",
-          "detail": "via flow.service.getRun → flow.repository.findRun",
-          "line": 393,
-          "operation": "read",
-          "rawSql": "select * from flow_runs where id = $1 and user_id = $2",
-          "query": "select * from flow_runs where id = $1 and user_id = $2",
-          "table": "flow_runs"
-        },
-        {
-          "kind": "db",
-          "target": "query",
-          "detail": "via flow.service.getRun → flow.repository.listRunSteps",
-          "line": 405,
-          "operation": "read",
-          "rawSql": "select * from flow_run_steps where run_id = $1 order by position",
-          "query": "select * from flow_run_steps where run_id = $1 order by position",
-          "table": "flow_run_steps"
         }
       ],
       "env": [],
@@ -2401,36 +2301,6 @@
           "target": "service.exportRun",
           "detail": null,
           "line": 130
-        },
-        {
-          "kind": "db",
-          "target": "queryOne",
-          "detail": "via flow.service.exportRun → flow.repository.findRun",
-          "line": 393,
-          "operation": "read",
-          "rawSql": "select * from flow_runs where id = $1 and user_id = $2",
-          "query": "select * from flow_runs where id = $1 and user_id = $2",
-          "table": "flow_runs"
-        },
-        {
-          "kind": "db",
-          "target": "one",
-          "detail": "via flow.service.exportRun → flow.repository.findFlow",
-          "line": 222,
-          "operation": "read",
-          "rawSql": "select * from flows where id = $1 and user_id = $2 and deleted_at is null",
-          "query": "select * from flows where id = $1 and user_id = $2 and deleted_at is null",
-          "table": "flows"
-        },
-        {
-          "kind": "db",
-          "target": "query",
-          "detail": "via flow.service.exportRun → flow.repository.listRunSteps",
-          "line": 405,
-          "operation": "read",
-          "rawSql": "select * from flow_run_steps where run_id = $1 order by position",
-          "query": "select * from flow_run_steps where run_id = $1 order by position",
-          "table": "flow_run_steps"
         }
       ],
       "env": [],
@@ -2600,20 +2470,25 @@
   ],
   "models": [],
   "conflicts": [],
-  "port": null,
-  "baseUrl": "http://localhost:3001",
+  "port": {
+    "port": 5005,
+    "source": ".env PORT",
+    "file": ".env",
+    "confidence": 0.85
+  },
+  "baseUrl": "http://localhost:5005",
   "env": [
     "K_REVISION",
     "NODE_ENV",
     "PORT"
   ],
   "stats": {
-    "filesSeen": 39,
+    "filesSeen": 40,
     "filesParsed": 39,
     "routes": 29,
     "groups": 5,
     "issues": 14,
-    "durationMs": 72,
+    "durationMs": 74,
     "skipped": []
   }
 }

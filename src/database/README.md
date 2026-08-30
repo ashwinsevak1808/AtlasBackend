@@ -25,6 +25,11 @@ paste into the Supabase SQL editor, in order. They are idempotent
 | 011 | `011_flow_runs.sql` | `flow_runs`, `flow_run_steps` | run history and reports |
 | 012 | `012_flow_schedules.sql` | `flow_schedules` | the scheduler |
 | 013 | `013_flow_schedules_unique.sql` | one-schedule-per-flow constraint | **run this if you applied 012 before 2026-08-18** |
+| 014 | `014_subscribers.sql` | `subscribers` | the product-updates list, for people with no account |
+
+014 is required for the newsletter form on the landing page, and needs nothing
+but 001 (it uses `citext`, `gen_random_bytes` and `set_updated_at`). It is the
+only table phase 1 writes to.
 
 001 through 007 are required for the auth feature to work. 009 through 012 are
 required for server-side flow runs and schedules. 008 is safe to run now and

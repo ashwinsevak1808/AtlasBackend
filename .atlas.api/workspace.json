@@ -1,0 +1,285 @@
+{
+  "drafts": {
+    "GET:/:app.ts:46": {
+      "pathParams": {},
+      "queryParams": [
+        {
+          "id": "kv_mt4cm6712",
+          "key": "base_url",
+          "value": "{{BASE_URL}}",
+          "enabled": true
+        },
+        {
+          "id": "kv_mt4cm77m3",
+          "key": "",
+          "value": "",
+          "enabled": true
+        }
+      ],
+      "headers": [
+        {
+          "id": "h_mt4clvty1",
+          "key": "Content-Type",
+          "value": "application/json",
+          "enabled": true
+        }
+      ],
+      "body": "",
+      "urlOverride": "http://localhost:5005/"
+    },
+    "POST:/api/auth/logout:src/modules/auth/auth.routes.ts:49": {
+      "pathParams": {},
+      "queryParams": [],
+      "headers": [
+        {
+          "id": "h_mt4cqdef4",
+          "key": "Content-Type",
+          "value": "application/json",
+          "enabled": true
+        },
+        {
+          "id": "h_mt4cqdef5",
+          "key": "Authorization",
+          "value": "Bearer {{token}}",
+          "enabled": true
+        }
+      ],
+      "body": "",
+      "urlOverride": null
+    },
+    "POST:/api/auth/login:src/modules/auth/auth.routes.ts:40": {
+      "pathParams": {},
+      "queryParams": [],
+      "headers": [
+        {
+          "id": "h_mt4cqdxe6",
+          "key": "Content-Type",
+          "value": "application/json",
+          "enabled": true
+        },
+        {
+          "id": "h_mt4cqdxe7",
+          "key": "Authorization",
+          "value": "Bearer {{token}}",
+          "enabled": true
+        }
+      ],
+      "body": "{\n  \"email\": \"user@example.com\",\n  \"password\": \"••••••••\"\n}",
+      "urlOverride": null
+    },
+    "POST:/api/auth/forgot-password:src/modules/auth/auth.routes.ts:45": {
+      "pathParams": {},
+      "queryParams": [],
+      "headers": [
+        {
+          "id": "h_mt4cqedl8",
+          "key": "Content-Type",
+          "value": "application/json",
+          "enabled": true
+        }
+      ],
+      "body": "{\n  \"email\": \"user@example.com\"\n}",
+      "urlOverride": null
+    },
+    "GET:/api-docs.json:src/config/swagger.ts:142": {
+      "pathParams": {},
+      "queryParams": [],
+      "headers": [
+        {
+          "id": "h_mt4cqoj79",
+          "key": "Content-Type",
+          "value": "application/json",
+          "enabled": true
+        }
+      ],
+      "body": "",
+      "urlOverride": null
+    },
+    "GET:/api/auth/me:src/modules/auth/auth.routes.ts:48": {
+      "pathParams": {},
+      "queryParams": [],
+      "headers": [
+        {
+          "id": "h_mt4cr1pia",
+          "key": "Content-Type",
+          "value": "application/json",
+          "enabled": true
+        },
+        {
+          "id": "h_mt4cr1pib",
+          "key": "Authorization",
+          "value": "Bearer {{token}}",
+          "enabled": true
+        }
+      ],
+      "body": "",
+      "urlOverride": null
+    },
+    "POST:/api/auth/register:src/modules/auth/auth.routes.ts:39": {
+      "pathParams": {},
+      "queryParams": [],
+      "headers": [
+        {
+          "id": "h_mt4cr20mc",
+          "key": "Content-Type",
+          "value": "application/json",
+          "enabled": true
+        },
+        {
+          "id": "h_mt4cr20md",
+          "key": "Authorization",
+          "value": "Bearer {{token}}",
+          "enabled": true
+        }
+      ],
+      "body": "{\n  \"confirmPassword\": \"••••••••\",\n  \"email\": \"user@example.com\",\n  \"password\": \"••••••••\"\n}",
+      "urlOverride": null
+    },
+    "POST:/api/auth/onboarding:src/modules/auth/auth.routes.ts:50": {
+      "pathParams": {},
+      "queryParams": [],
+      "headers": [
+        {
+          "id": "h_mt4csyboe",
+          "key": "Content-Type",
+          "value": "application/json",
+          "enabled": true
+        },
+        {
+          "id": "h_mt4csybof",
+          "key": "Authorization",
+          "value": "Bearer {{token}}",
+          "enabled": true
+        }
+      ],
+      "body": "{\n  \"companyName\": \"Example\",\n  \"companySize\": \"1\",\n  \"fullName\": \"Example\",\n  \"heardFrom\": \"search\",\n  \"heardFromDetail\": \"\",\n  \"persona\": \"student\",\n  \"primaryGoal\": \"test-apis\",\n  \"productUpdates\": false,\n  \"roleTitle\": \"Example\"\n}",
+      "urlOverride": null
+    },
+    "POST:/api/auth/resend-code:src/modules/auth/auth.routes.ts:43": {
+      "pathParams": {},
+      "queryParams": [],
+      "headers": [
+        {
+          "id": "h_mt4csz17g",
+          "key": "Content-Type",
+          "value": "application/json",
+          "enabled": true
+        }
+      ],
+      "body": "{\n  \"email\": \"user@example.com\",\n  \"purpose\": \"verify_email\"\n}",
+      "urlOverride": null
+    },
+    "POST:/api/auth/verify-email:src/modules/auth/auth.routes.ts:42": {
+      "pathParams": {},
+      "queryParams": [],
+      "headers": [
+        {
+          "id": "h_mt4csze6h",
+          "key": "Content-Type",
+          "value": "application/json",
+          "enabled": true
+        },
+        {
+          "id": "h_mt4csze6i",
+          "key": "Authorization",
+          "value": "Bearer {{token}}",
+          "enabled": true
+        }
+      ],
+      "body": "{\n  \"code\": \"\",\n  \"email\": \"user@example.com\"\n}",
+      "urlOverride": null
+    },
+    "POST:/api/flows:src/modules/flows/flow.routes.ts:67": {
+      "pathParams": {},
+      "queryParams": [],
+      "headers": [
+        {
+          "id": "h_mt4ct058j",
+          "key": "Content-Type",
+          "value": "application/json",
+          "enabled": true
+        },
+        {
+          "id": "h_mt4ct058k",
+          "key": "Authorization",
+          "value": "Bearer {{token}}",
+          "enabled": true
+        }
+      ],
+      "body": "{\n  \"clientFlowId\": \"\",\n  \"definition\": {},\n  \"environmentId\": \"00000000-0000-4000-8000-000000000000\",\n  \"name\": \"Example\",\n  \"projectKey\": \"\",\n  \"recipients\": []\n}",
+      "urlOverride": null
+    },
+    "GET:/api/flows:src/modules/flows/flow.routes.ts:68": {
+      "pathParams": {},
+      "queryParams": [
+        {
+          "id": "q_mt4ct0gml",
+          "key": "projectKey",
+          "value": "",
+          "enabled": false
+        }
+      ],
+      "headers": [
+        {
+          "id": "h_mt4ct0gmm",
+          "key": "Content-Type",
+          "value": "application/json",
+          "enabled": true
+        },
+        {
+          "id": "h_mt4ct0gmn",
+          "key": "Authorization",
+          "value": "Bearer {{token}}",
+          "enabled": true
+        }
+      ],
+      "body": "",
+      "urlOverride": null
+    },
+    "DELETE:/api/flows/:id:src/modules/flows/flow.routes.ts:74": {
+      "pathParams": {
+        "id": ""
+      },
+      "queryParams": [],
+      "headers": [
+        {
+          "id": "h_mt4ct0too",
+          "key": "Content-Type",
+          "value": "application/json",
+          "enabled": true
+        },
+        {
+          "id": "h_mt4ct0top",
+          "key": "Authorization",
+          "value": "Bearer {{token}}",
+          "enabled": true
+        }
+      ],
+      "body": "",
+      "urlOverride": null
+    },
+    "POST:/api/flows/:id/run:src/modules/flows/flow.routes.ts:76": {
+      "pathParams": {
+        "id": ""
+      },
+      "queryParams": [],
+      "headers": [
+        {
+          "id": "h_mt4ct16mq",
+          "key": "Content-Type",
+          "value": "application/json",
+          "enabled": true
+        },
+        {
+          "id": "h_mt4ct16mr",
+          "key": "Authorization",
+          "value": "Bearer {{token}}",
+          "enabled": true
+        }
+      ],
+      "body": "",
+      "urlOverride": null
+    }
+  },
+  "captures": []
+}
